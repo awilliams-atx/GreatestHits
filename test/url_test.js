@@ -1,5 +1,7 @@
 'use strict';
 
+// NOTE: DBObject instance methods have no test coverage, and so are not used in "production".
+
 const Url = require('../models/url.js');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
@@ -9,20 +11,27 @@ const should = chai.should();
 const sqlite3 = require('sqlite3');
 
 describe('Url model', function () {
-  var db, dropAndCreateTableUrls, dropTableUrls, insertGoogle, insertYahoo, selectSqlZoo;
+  var dropAndCreateTableUrls,
+      dropTableUrls,
+      insertGoogle,
+      insertYahoo,
+      selectAll,
+      selectGooogle,
+      selectSqlZoo;
+
   beforeEach(() => {
     dropAndCreateTableUrls = function (cb) {
-      db = new sqlite3.Database('./data.db', () => {
+      let db = new sqlite3.Database('./data.db', () => {
         db.serialize(() => {
           db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, long TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
             db.close();
-            cb();
+            cb && cb();
           });
         });
       });
     };
     dropTableUrls = function (cb) {
-      db = new sqlite3.Database('./data.db', () => {
+      let db = new sqlite3.Database('./data.db', () => {
         db.run('DROP TABLE IF EXISTS urls;', [], () => {
           db.close();
           cb && cb();
@@ -30,25 +39,53 @@ describe('Url model', function () {
       });
     };
     insertGoogle = function (cb) {
-      db = new sqlite3.Database('./data.db', () => {
+      let db = new sqlite3.Database('./data.db', () => {
         db.serialize(function () {
           db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
             db.close();
-            cb();
+            cb && cb();
           });
         });
       });
     };
     insertYahoo = function (cb) {
-      db = new sqlite3.Database('./data.db', () => {
+      let db = new sqlite3.Database('./data.db', () => {
         db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
           db.close();
-          cb();
+          cb && cb();
+        });
+      });
+    };
+    selectAll = function (cb) {
+      let db = new sqlite3.Database('./data.db', () => {
+        db.all("SELECT * FROM urls;"
+        , [], (err, rows) => {
+          if (err) {
+            db.close();
+            return cb(err);
+          } else {
+            db.close();
+            return cb(rows);
+          }
+        });
+      });
+    }
+    selectGooogle = function (cb) {
+      let db = new sqlite3.Database('./data.db', () => {
+        db.get("SELECT * FROM urls WHERE long = 'http://www.gooogle.com/';"
+          , [], (err, row) => {
+          if (err) {
+            db.close();
+            return cb(err);
+          } else {
+            db.close();
+            return cb(row);
+          }
         });
       });
     };
     selectSqlZoo = function (cb) {
-      db = new sqlite3.Database('./data.db', () => {
+      let db = new sqlite3.Database('./data.db', () => {
         db.get("SELECT * FROM urls WHERE long = 'http://www.sqlzoo.com/';"
           , [], (err, row) => {
           if (err) {
@@ -63,9 +100,8 @@ describe('Url model', function () {
     }
   });
   describe('when table does not exist', function () {
-    var db;
     before(function (done) {
-      db = new sqlite3.Database('./data.db', function () {
+      let db = new sqlite3.Database('./data.db', function () {
         db.run('DROP TABLE IF EXISTS urls;', [], () => {
           db.close();
           done();
@@ -222,10 +258,14 @@ describe('Url model', function () {
           });
         });
       });
+      after(done => {
+        dropTableUrls(done);
+      });
       it('returns an empty array when no matches found', (done) => {
         var url = Url.where({
           tableName: 'urls',
-          where: { long: 'http://www.amazon.com/' }
+          where: { long: 'http://www.amazon.com/' },
+          quiet: true
         });
         url.should.eventually.deep.equal([]).notify(done);
       });
@@ -235,7 +275,8 @@ describe('Url model', function () {
           where: { long: 'http://www.google.com/' },
           quiet: true
         });
-        url.should.eventually.have.deep.property('[0].long', 'http://www.google.com/').notify(done);
+        url.should.eventually.have.deep
+          .property('[0].long', 'http://www.google.com/').notify(done);
       });
       it('returns an array with several matching url objects', (done) => {
         var url = Url.where({
@@ -252,7 +293,99 @@ describe('Url model', function () {
           where: { long: 'http://www.google.com/' },
           quiet: true
         });
-        url.should.eventually.have.deep.property('[0].tableName', 'urls').notify(done);
+        url.should.eventually.have.deep
+          .property('[0].tableName').notify(done);
+      });
+    });
+    describe('::update', () => {
+      describe('updates', () => {
+        beforeEach(done => {
+          dropAndCreateTableUrls(() => {
+            insertGoogle(() => {
+              Url.update({
+                tableName: 'urls',
+                where: { id: 1 },
+                set: { long: 'http://www.gooogle.com/' },
+                done: true,
+                quiet: true
+              }).then(() => {
+                done();
+              });
+            });
+          });
+        });
+        after(done => {
+          dropTableUrls(() => {
+            done();
+          });
+        });
+        it('single matching row', (done) => {
+          selectGooogle(row => {
+            row.should.have.deep.property('long', 'http://www.gooogle.com/');
+            done();
+          });
+        });
+      });
+      describe('updates', () => {
+        beforeEach(done => {
+          dropAndCreateTableUrls(() => {
+            insertGoogle(() => {
+              insertYahoo(() => {
+                Url.update({
+                  tableName: 'urls',
+                  set: { long: 'http://www.sqlzoo.com/' },
+                  where: { long: 'http://www.google.com/' },
+                  done: true,
+                  quiet: true
+                }).then(() => {
+                  done();
+                });
+              });
+            });
+          });
+        });
+        after(done => {
+          dropTableUrls(() => {
+            done();
+          });
+        });
+        it('matching rows only', (done) => {
+          selectAll(rows => {
+            rows[0].long.should.equal('http://www.sqlzoo.com/');
+            rows[1].long.should.equal('http://www.yahoo.com/');
+            done();
+          });
+        });
+      });
+      describe('updates', () => {
+        beforeEach(done => {
+          dropAndCreateTableUrls(() => {
+            insertGoogle(() => {
+              insertYahoo(() => {
+                Url.update({
+                  tableName: 'urls',
+                  set: { long: 'http://www.sqlzoo.com/' },
+                  done: true,
+                  quiet: true
+                }).then(() => {
+                  done();
+                });
+              });
+            });
+          });
+        });
+        after(done => {
+          dropTableUrls(() => {
+            done();
+          });
+        });
+        it('all rows', (done) => {
+          selectAll(rows => {
+            rows[0].long.should.equal('http://www.sqlzoo.com/');
+            rows[1].long.should.equal('http://www.sqlzoo.com/');
+            done();
+          });
+        });
       });
     });
   });
