@@ -32,7 +32,7 @@ describe('Url model', function () {
     insertGoogle = function (cb) {
       db = new sqlite3.Database('./data.db', () => {
         db.serialize(function () {
-          db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
+          db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
             db.close();
             cb();
           });
@@ -41,7 +41,7 @@ describe('Url model', function () {
     };
     insertYahoo = function (cb) {
       db = new sqlite3.Database('./data.db', () => {
-        db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
+        db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
           db.close();
           cb();
         });
@@ -208,6 +208,51 @@ describe('Url model', function () {
           row.updatedAt.should.match(/^\d+/);
           done();
         });
+      });
+    });
+    describe('::where', () => {
+      beforeEach(done => {
+        dropAndCreateTableUrls(() => {
+          insertGoogle(() => {
+            insertYahoo(() => {
+              insertYahoo(() => {
+                done();
+              });
+            });
+          });
+        });
+      });
+      it('returns an empty array when no matches found', (done) => {
+        var url = Url.where({
+          tableName: 'urls',
+          where: { long: 'http://www.amazon.com/' }
+        });
+        url.should.eventually.deep.equal([]).notify(done);
+      });
+      it('returns an array with single matching url objects', (done) => {
+        var url = Url.where({
+          tableName: 'urls',
+          where: { long: 'http://www.google.com/' },
+          quiet: true
+        });
+        url.should.eventually.have.deep.property('[0].long', 'http://www.google.com/').notify(done);
+      });
+      it('returns an array with several matching url objects', (done) => {
+        var url = Url.where({
+          tableName: 'urls',
+          where: { long: 'http://www.yahoo.com/' },
+          quiet: true
+        });
+        url.should.eventually.have.length(2).notify(done);
+      });
+      it('returns Url instances when given Constructor', (done) => {
+        var url = Url.where({
+          Constructor: Url,
+          tableName: 'urls',
+          where: { long: 'http://www.google.com/' },
+          quiet: true
+        });
+        url.should.eventually.have.deep.property('[0].tableName', 'urls').notify(done);
       });
     });
   });
