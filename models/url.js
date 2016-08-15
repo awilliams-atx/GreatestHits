@@ -8,3 +8,5 @@ class Url extends DBObject {
     this.attributes = attributes || {};
   }
 }
+
+module.exports = Url;
