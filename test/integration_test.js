@@ -100,9 +100,85 @@ describe('integration', () => {
         .expect(res => {
           expect(res.body).to.have.deep.property('attributes.id', 2);
           expect(res.body).to.have.deep
-            .property('attributes.')
+            .property('attributes.');
         })
         .end(done);
+    });
+  });
+  describe('GET /* (redirecting)', () => {
+    beforeEach(done => {
+      app = require('../app')({quiet: true});
+      server = app.listen(3000);
+      Util.enableMockery();
+      Util.mockExpressDevice('phone');
+      Util.dropAndCreateTableUrls(() => {
+        Util.insertGoogle(() => {
+          Util.insertYahoo(() => {
+            done();
+          });
+        });
+      });
+    });
+    afterEach(done => {
+      server.close();
+      Util.disableMockery();
+      Util.dropTableUrls(() => {
+        done();
+      });
+    });
+    it('responds 302', (done) => {
+      let yahooShort;
+      request(app)
+        .get('/url/2')
+        .send({quiet: true})
+        .expect(res => {
+          yahooShort = res.body.attributes.short;
+          res.body.attributes.id.should.equal(2);
+          res.body.attributes.desktop.should.equal('http://www.yahoo.com/');
+        })
+        .end(() => {
+          request(app)
+            .get(yahooShort)
+            .send({quiet: true})
+            .expect(302)
+            .expect(res => {
+              res.headers.location.should
+                .equal('http://www.yahoo.com/mobile/');
+            })
+            .end(done);
+        });
+    });
+    it('updates hit and redirect counts', (done) => {
+      let yahooShort;
+      request(app)
+        .get('/url/2')
+        .send({quiet: true})
+        .expect(res => {
+          yahooShort = res.body.attributes.short;
+          res.body.attributes.id.should.equal(2);
+          res.body.attributes.desktop.should.equal('http://www.yahoo.com/');
+        })
+        .end(() => {
+          request(app)
+            .get(yahooShort)
+            .send({quiet: true})
+            .expect(302)
+            .expect(res => {
+              res.headers.location.should
+                .equal('http://www.yahoo.com/mobile/');
+            })
+            .end(() => {
+              request(app)
+                .get('/url/2')
+                .send({quiet: true})
+                .expect(res => {
+                  res.body.attributes.mobileHits.should.equal(1);
+                  res.body.attributes.mobileRedirects.should.equal(1);
+                  res.body.attributes.desktopHits.should.equal(0);
+                })
+                .end(done);
+            });
+        });
     });
   });
 });

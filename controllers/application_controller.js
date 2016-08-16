@@ -2,6 +2,7 @@
 
 class ApplicationController {
   params (whiteList, merge) {
+    if (merge === undefined) { merge = {}; }
     let setWhiteList = {};
     whiteList.forEach(item => { setWhiteList[item] = true });
     let incomingParams = Object.assign({}, this.req.params, this.req.query, this.req.body);
@@ -9,7 +10,7 @@ class ApplicationController {
     Object.keys(incomingParams).forEach(key => {
       if (setWhiteList[key]) { params[key] = incomingParams[key]; }
     });
-    return merge ? Object.assign(params, merge) : params;
+    return Object.assign(params, merge);
   }
 }
 
