@@ -31,6 +31,21 @@ class Url extends DBObject {
       });
     });
   }
+
+  static defaults (op) {
+    let short = op.attributes.short;
+    short = (short.match(/^\//)) ? short : '/' + short;
+    op.attributes.short = short;
+    return {
+      short,
+      desktopHits: 0,
+      mobileHits: 0,
+      tabletHits: 0,
+      desktopRedirects: 0,
+      mobileRedirects: 0,
+      tabletRedirects: 0
+    };
+  }
 }
 
 module.exports = Url;

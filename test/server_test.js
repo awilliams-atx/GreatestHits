@@ -3,21 +3,20 @@
 const request = require('supertest'),
       chai = require('chai'),
       expect = chai.expect,
-      Util = require('./Util.js');
+      Util = require('./Util.js'),
+      app = require('../app')({quiet: true});
 
 describe('routes', () => {
-  let app, server;
+  let app;
   describe('GET /url/:id', () => {
     describe('url not found', () => {
       before(() => {
         Util.enableMockery();
         Util.mockUrl({ find: () => { return new Promise(res => res(null)) } });
         app = require('../app')({quiet: true});
-        server = app.listen(3000);
       });
       after(() => {
         Util.disableMockery();
-        server.close();
       });
       it('responds 404', (done) => {
         request(app)
@@ -30,11 +29,9 @@ describe('routes', () => {
         Util.enableMockery();
         Util.mockUrl({ find: () => { return new Promise(res => res({})) } });
         app = require('../app')({quiet: true});
-        server = app.listen(3000);
       });
       after(() => {
         Util.disableMockery();
-        server.close();
       });
       it('responds with url', (done) => {
         request(app)
@@ -48,12 +45,10 @@ describe('routes', () => {
       Util.enableMockery();
       Util.mockUrl({ all: () => { return new Promise(res => res([{},{}])) } });
       app = require('../app')({quiet: true});
-      server = app.listen(3000);
       done();
     });
     after(() => {
       Util.disableMockery();
-      server.close();
     });
     it('returns all urls', (done) => {
       request(app)
@@ -76,14 +71,12 @@ describe('routes', () => {
         insert: () => { return new Promise(res => res('MockInsertOpts')) }
       });
       app = require('../app')({quiet: true});
-      server = app.listen(3000);
       Util.dropAndCreateTableUrls(() => {
         done();
       });
     });
     after((done) => {
       Util.disableMockery();
-      server.close();
       Util.dropTableUrls(() => {
         done();
       });
@@ -107,10 +100,8 @@ describe('routes', () => {
           where: () => { return new Promise(res => res([])) }
         });
         app = require('../app')({quiet: true});
-        server = app.listen(3000);
       });
       after((done) => {
-        server.close();
         Util.dropTableUrls(() => {
           done();
         });
@@ -133,10 +124,6 @@ describe('routes', () => {
         });
         beforeEach(() => {
           app = require('../app')({quiet: true});
-          server = app.listen(3000);
-        });
-        afterEach(() => {
-          server.close();
         });
         describe('and mobile url available', () => {
           before(() => {
@@ -144,14 +131,17 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
+                    id: 1,
                     desktop: 'https://www.google.com/',
                     mobile: 'https://www.google.com/mobile/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
-          it ('responds with appropriate url', () => {
+          it('responds with appropriate url', () => {
             request(app)
               .get('/8bv2hhd8sawp')
               .expect(302)
@@ -168,11 +158,14 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
+                    id: 1,
                     desktop: 'https://www.google.com/',
                     tablet: 'https://www.tablethotels.com/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
           after(() => {
@@ -195,11 +188,9 @@ describe('routes', () => {
           Util.enableMockery();
           Util.mockExpressDevice('desktop');
           app = require('../app')({quiet: true});
-          server = app.listen(3000);
         });
         afterEach(() => {
           Util.disableMockery();
-          server.close();
         });
         describe('and desktop url available', () => {
           before(() => {
@@ -207,11 +198,14 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
+                    id: 1,
                     desktop: 'https://www.google.com/',
                     mobile: 'https://www.google.com/mobile/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
           it('redirects to appropriate url', (done) => {
@@ -233,7 +227,9 @@ describe('routes', () => {
                     mobile: 'https://www.google.com/mobile/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
           it('responds 404', (done) => {
@@ -249,11 +245,9 @@ describe('routes', () => {
           Util.enableMockery();
           Util.mockExpressDevice('tablet');
           app = require('../app')({quiet: true});
-          server = app.listen(3000);
         });
         afterEach(() => {
           Util.disableMockery();
-          server.close();
         });
         describe('and tablet url available', () => {
           before(() => {
@@ -261,11 +255,14 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
+                    id: 1,
                     desktop: 'https://www.google.com/',
                     tablet: 'https://www.tablethotels.com/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
           it('redirects to appropriate url', (done) => {
@@ -285,11 +282,14 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
+                    id: 1,
                     mobile: 'https://www.google.com/mobile/',
                     desktop: 'https://www.google.com/'
                   }
                 }]));
-              }
+              },
+              update: () => { return new Promise (res => res({})) },
+              find: () => { return new Promise (res => res()) }
             });
           });
           it('redirects to default url (desktop)', (done) => {
