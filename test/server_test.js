@@ -93,7 +93,6 @@ describe('routes', () => {
     });
   });
   describe('GET /* (redirecting)', () => {
-    let mobileSafari = 'Mozilla/5.0 (Linux; Android 4.4.2); Nexus 5 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Mobile Safari/537.36 OPR/20.0.1396.72047';
     describe('when short url not found', () => {
       before(() => {
         Util.mockUrl({
@@ -131,7 +130,6 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
-                    id: 1,
                     desktop: 'https://www.google.com/',
                     mobile: 'https://www.google.com/mobile/'
                   }
@@ -158,7 +156,6 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
-                    id: 1,
                     desktop: 'https://www.google.com/',
                     tablet: 'https://www.tablethotels.com/'
                   }
@@ -198,7 +195,6 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
-                    id: 1,
                     desktop: 'https://www.google.com/',
                     mobile: 'https://www.google.com/mobile/'
                   }
@@ -255,7 +251,6 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
-                    id: 1,
                     desktop: 'https://www.google.com/',
                     tablet: 'https://www.tablethotels.com/'
                   }
@@ -282,7 +277,6 @@ describe('routes', () => {
               where: () => {
                 return new Promise(res => res([{
                   attributes: {
-                    id: 1,
                     mobile: 'https://www.google.com/mobile/',
                     desktop: 'https://www.google.com/'
                   }
