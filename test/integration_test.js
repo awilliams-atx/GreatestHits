@@ -41,6 +41,37 @@ describe('integration', () => {
         .end(done);
     });
   });
+  describe('GET /urls', () => {
+    before(done => {
+      app = require('../app')({quiet: true});
+      server = app.listen(3000);
+      Util.dropAndCreateTableUrls(() => {
+        Util.insertGoogle(() => {
+          Util.insertYahoo(() => {
+            done();
+          });
+        });
+      });
+    });
+    after(done => {
+      server.close();
+      Util.dropTableUrls(() => {
+        done();
+      });
+    });
+    it('retrieves all URLS from database', (done) => {
+      request(app)
+        .get('/urls')
+        .expect(200)
+        .expect(res => {
+          res.body.should.have.length(2);
+          res.body[0].should.have.deep.property('attributes.mobileHits', 0);
+          res.body[1].should.have.deep
+            .property('attributes.desktop', 'http://www.yahoo.com/');
+        })
+        .end(done);
+    });
+  });
   describe('GET /url/:id', () => {
     before(done => {
       app = require('../app')({quiet: true});

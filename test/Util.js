@@ -37,7 +37,7 @@ module.exports = {
   insertGoogle: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(function () {
-        db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('3h28ddj7ag1d', 'http://www.google.com/', 'http://www.google.com/mobile/', 'http://www.google.com/tablet/', datetime(), datetime());", [], () => {
+        db.run("INSERT INTO urls (short, desktop, mobile, tablet, desktopHits, mobileHits, tabletHits, desktopRedirects, mobileRedirects, tabletRedirects, createdAt, updatedAt) VALUES ('/3h28ddj7ag1d', 'http://www.google.com/', 'http://www.google.com/mobile/', 'http://www.google.com/tablet/', 0, 0, 0, 0, 0, 0, datetime(), datetime());", [], () => {
           db.close();
           cb && cb();
         });
@@ -46,7 +46,7 @@ module.exports = {
   },
   insertYahoo: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('10dkddjfj3hd', 'http://www.yahoo.com/', 'http://www.yahoo.com/mobile/', 'http://www.yahoo.com/tablet', datetime(), datetime());", [], () => {
+      db.run("INSERT INTO urls (short, desktop, mobile, tablet, desktopHits, mobileHits, tabletHits, desktopRedirects, mobileRedirects, tabletRedirects, createdAt, updatedAt) VALUES ('/10dkddjfj3hd', 'http://www.yahoo.com/', 'http://www.yahoo.com/mobile/', 'http://www.yahoo.com/tablet', 0, 0, 0, 0, 0, 0, datetime(), datetime());", [], () => {
         db.close();
         cb && cb();
       });
