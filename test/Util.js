@@ -12,7 +12,7 @@ module.exports = {
   dropAndCreateTableUrls: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(() => {
-        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
+        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, desktopHits INTEGER, mobileHits INTEGER, tabletHits INTEGER, desktopRedirects INTEGER, mobileRedirects INTEGER, tabletRedirects INTEGER, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
           db.close();
           cb && cb();
         });
@@ -37,7 +37,7 @@ module.exports = {
   insertGoogle: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(function () {
-        db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
+        db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('3h28ddj7ag1d', 'http://www.google.com/', 'http://www.google.com/mobile/', 'http://www.google.com/tablet/', datetime(), datetime());", [], () => {
           db.close();
           cb && cb();
         });
@@ -46,7 +46,7 @@ module.exports = {
   },
   insertYahoo: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
+      db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('10dkddjfj3hd', 'http://www.yahoo.com/', 'http://www.yahoo.com/mobile/', 'http://www.yahoo.com/tablet', datetime(), datetime());", [], () => {
         db.close();
         cb && cb();
       });
