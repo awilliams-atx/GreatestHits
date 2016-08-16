@@ -145,8 +145,9 @@ describe('Url model', function () {
       beforeEach(done => {
         Util.dropAndCreateTableUrls(() => {
           Url.insert({
+            Constructor: Url,
             tableName: 'urls',
-            attributes: {short: 'http://www.sqlzoo.com/'},
+            attributes: {short: '/h5g3n7m5k6h8', desktop: 'http://www.sqlzoo.com/'},
             quiet: true
           }).then(() => {
             done();
@@ -156,13 +157,10 @@ describe('Url model', function () {
       after(done => {
         Util.dropTableUrls(done);
       });
-      after(done => {
-        Util.dropTableUrls(done);
-      });
       it('inserts a record', (done) => {
         Util.selectSqlZoo((row) => {
           row.should.have.deep.property('id', 1);
-          row.should.have.deep.property('short', 'http://www.sqlzoo.com/');
+          row.should.have.deep.property('desktop', 'http://www.sqlzoo.com/');
           done();
         });
       });

@@ -98,7 +98,7 @@ module.exports = {
   },
   selectSqlZoo: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.get("SELECT * FROM urls WHERE short = 'http://www.sqlzoo.com/';"
+      db.get("SELECT * FROM urls WHERE desktop = 'http://www.sqlzoo.com/';"
         , [], (err, row) => {
         if (err) {
           db.close();

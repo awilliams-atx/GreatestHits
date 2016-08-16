@@ -26,7 +26,8 @@ class UrlsController extends ApplicationController {
     Url.find({
       tableName: 'urls',
       Constructor: Url,
-      id: this.urlParams().id
+      id: this.urlParams().id,
+      quiet: this.miscParams().quiet
     }).then(url => {
       if (url === null) {
         this.res.status(404).send('Url not found');
@@ -44,7 +45,7 @@ class UrlsController extends ApplicationController {
       .then(str => {
         let urlParams = this.urlParams({short: '/' + str});
         return Url.insert({
-          attributes: urlParams, tableName: 'urls', done: false, Constructor: Url
+          attributes: urlParams, tableName: 'urls', done: false, quiet: this.miscParams().quiet, Constructor: Url
         });
       }).then((op) => {
         Object.assign(op, {done: true});
@@ -59,6 +60,10 @@ class UrlsController extends ApplicationController {
 
   urlParams (merge) {
     return this.params(['desktop', 'id', 'mobile', 'tablet', 'desktopHits', 'mobileHits', 'tabletHits', 'desktopRedirects', 'mobileRedirects', 'tabletRedirects'], merge);
+  }
+
+  miscParams () {
+    return this.params(['quiet']);
   }
 }
 
