@@ -6,10 +6,11 @@ const request = require('supertest'),
       Util = require('./Util.js');
 
 describe('routes', () => {
+  let app, server;
   describe('GET /url/:id', () => {
     describe('url not found', () => {
-      let app, server;
       before(() => {
+        Util.enableMockery();
         Util.mockUrl({ find: () => { return new Promise(res => res(null)) } });
         app = require('../app')({quiet: true});
         server = app.listen(3000);
@@ -25,8 +26,8 @@ describe('routes', () => {
       });
     });
     describe('url found', () => {
-      let app, server;
       before(() => {
+        Util.enableMockery();
         Util.mockUrl({ find: () => { return new Promise(res => res({})) } });
         app = require('../app')({quiet: true});
         server = app.listen(3000);
@@ -43,8 +44,8 @@ describe('routes', () => {
     });
   });
   describe('GET /urls', () => {
-    let app, server;
     before(done => {
+      Util.enableMockery();
       Util.mockUrl({ all: () => { return new Promise(res => res([{},{}])) } });
       app = require('../app')({quiet: true});
       server = app.listen(3000);
@@ -65,11 +66,8 @@ describe('routes', () => {
     });
   });
   describe('POST /urls', () => {
-    let app, server, mockAvailStr, mockFind, mockInsert;
     before(done => {
-      var mockFind = function () {
-        return new Promise(res => res({}));
-      }
+      Util.enableMockery();
       Util.mockUrl({
         AvailableRandomString: () => {
           return new Promise(res => res('MockRandomString'));
@@ -99,6 +97,212 @@ describe('routes', () => {
           expect(res.body).to.equal('MockUrl');
         })
         .end(done);
+    });
+  });
+  describe('GET /* (redirecting)', () => {
+    let mobileSafari = 'Mozilla/5.0 (Linux; Android 4.4.2); Nexus 5 Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.117 Mobile Safari/537.36 OPR/20.0.1396.72047';
+    describe('when short url not found', () => {
+      before(() => {
+        Util.mockUrl({
+          where: () => { return new Promise(res => res([])) }
+        });
+        app = require('../app')({quiet: true});
+        server = app.listen(3000);
+      });
+      after((done) => {
+        server.close();
+        Util.dropTableUrls(() => {
+          done();
+        });
+      });
+      it ('responds 404', () => {
+        request(app)
+          .get('/8bv2hhd8sawp')
+          .expect(404);
+      });
+    });
+    describe('when short url found', () => {
+      beforeEach(() => {
+        Util.mockNodeUrl({
+          'parse': () => { return { pathname: '/8bv2hhd8sawp' } }
+        });
+      });
+      describe('and mobile detected', () => {
+        before(() => {
+          Util.mockExpressDevice('phone');
+        });
+        beforeEach(() => {
+          app = require('../app')({quiet: true});
+          server = app.listen(3000);
+        });
+        afterEach(() => {
+          server.close();
+        });
+        describe('and mobile url available', () => {
+          before(() => {
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    desktop: 'https://www.google.com/',
+                    mobile: 'https://www.google.com/mobile/'
+                  }
+                }]));
+              }
+            });
+          });
+          it ('responds with appropriate url', () => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(302)
+              .expect(res => {
+              res.header['location']
+                .should.equal('https://www.google.com/mobile/')
+            });
+          });
+        });
+        describe('but mobile url unavailable', () => {
+          before(() => {
+            Util.enableMockery();
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    desktop: 'https://www.google.com/',
+                    tablet: 'https://www.tablethotels.com/'
+                  }
+                }]));
+              }
+            });
+          });
+          after(() => {
+            Util.disableMockery();
+          });
+          it ('responds with default url (desktop)', (done) => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(302)
+              .expect(res => {
+                res.header['location']
+                .should.equal('https://www.google.com/')
+              })
+              .end(done);
+          });
+        });
+      });
+      describe('and desktop detected', () => {
+        beforeEach(() => {
+          Util.enableMockery();
+          Util.mockExpressDevice('desktop');
+          app = require('../app')({quiet: true});
+          server = app.listen(3000);
+        });
+        afterEach(() => {
+          Util.disableMockery();
+          server.close();
+        });
+        describe('and desktop url available', () => {
+          before(() => {
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    desktop: 'https://www.google.com/',
+                    mobile: 'https://www.google.com/mobile/'
+                  }
+                }]));
+              }
+            });
+          });
+          it('redirects to appropriate url', (done) => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(302)
+              .expect(res => {
+                res.header['location'].should.equal('https://www.google.com/');
+              })
+              .end(done);
+          });
+        });
+        describe('but desktop url unavailable', () => {
+          before(() => {
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    mobile: 'https://www.google.com/mobile/'
+                  }
+                }]));
+              }
+            });
+          });
+          it('responds 404', (done) => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(404)
+              .end(done);
+          });
+        });
+      });
+      describe('and tablet detected', () => {
+        beforeEach(() => {
+          Util.enableMockery();
+          Util.mockExpressDevice('tablet');
+          app = require('../app')({quiet: true});
+          server = app.listen(3000);
+        });
+        afterEach(() => {
+          Util.disableMockery();
+          server.close();
+        });
+        describe('and tablet url available', () => {
+          before(() => {
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    desktop: 'https://www.google.com/',
+                    tablet: 'https://www.tablethotels.com/'
+                  }
+                }]));
+              }
+            });
+          });
+          it('redirects to appropriate url', (done) => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(302)
+              .expect(res => {
+                res.header['location']
+                  .should.equal('https://www.tablethotels.com/');
+              })
+              .end(done);
+          });
+        });
+        describe('but tablet url unavailable', () => {
+          before(() => {
+            Util.mockUrl({
+              where: () => {
+                return new Promise(res => res([{
+                  attributes: {
+                    mobile: 'https://www.google.com/mobile/',
+                    desktop: 'https://www.google.com/'
+                  }
+                }]));
+              }
+            });
+          });
+          it('redirects to default url (desktop)', (done) => {
+            request(app)
+              .get('/8bv2hhd8sawp')
+              .expect(302)
+              .expect(res => {
+                res.header['location'].should.equal('https://www.google.com/');
+              })
+              .end(done);
+          });
+        });
+      });
     });
   });
 });

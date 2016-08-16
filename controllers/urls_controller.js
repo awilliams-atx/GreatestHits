@@ -43,7 +43,7 @@ class UrlsController extends ApplicationController {
     Url.AvailableRandomString()
       .then(str => {
         return Url.insert({
-          attributes: this.urlParams({short: str}), tableName: 'urls',
+          attributes: this.urlParams({short: '/' + str}), tableName: 'urls',
             done: false,
         });
       }).then((op) => {

@@ -1,6 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
+const RedirectsController = require('../controllers/redirects_controller');
 const UrlsController = require('../controllers/urls_controller');
 
 router.get('/urls', (req, res) => {
@@ -14,5 +15,9 @@ router.get('/url/:id', (req, res) => {
 router.post('/urls', (req, res) => {
   new UrlsController(req, res).create();
 });
+
+router.get('*', (req, res) => {
+  new RedirectsController(req, res).redirect();
+})
 
 module.exports = router;
