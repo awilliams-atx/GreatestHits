@@ -1,9 +1,14 @@
 'use strict';
 
-const Url = require('../models/url.js');
+const app = require('../app');
+const mockery = require('mockery');
 const sqlite3 = require('sqlite3');
+const Url = require('../models/url.js');
 
 module.exports = {
+  disableMockery: function () {
+    mockery.disable();
+  },
   dropAndCreateTableUrls: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(() => {
@@ -39,6 +44,14 @@ module.exports = {
         cb && cb();
       });
     });
+  },
+  mockUrl: function (mock) {
+    mockery.enable({
+      warnOnUnregistered: false,
+      warnOnReplace: false,
+      useCleanCache: true
+    });
+    mockery.registerMock('../models/url.js', mock);
   },
   selectAll: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
