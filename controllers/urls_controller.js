@@ -1,8 +1,10 @@
 'use strict';
 const Url = require('../models/url.js');
+const ApplicationController = require('./application_controller');
 
-class UrlsController {
+class UrlsController extends ApplicationController {
   constructor (req, res) {
+    super();
     this.req = req;
     this.res = res;
   }
@@ -38,17 +40,11 @@ class UrlsController {
   }
 
   create () {
-    let params = this.urlParams();
     Url.AvailableRandomString()
       .then(str => {
         return Url.insert({
-          attributes: {
-            short: str,
-            desktop: params.desktop ? params.desktop : null,
-            mobile: params.mobile ? params.mobile : null,
-            tablet: params.tablet ? params.tablet : null
-          },
-          tableName: 'urls', done: false,
+          attributes: this.urlParams({short: str}), tableName: 'urls',
+            done: false,
         });
       }).then((op) => {
         return Url.find(Object.assign(op, {
@@ -62,14 +58,8 @@ class UrlsController {
       });
   }
 
-  urlParams () {
-    let incomingParams = Object.assign({}, this.req.params, this.req.query, this.req.body);
-    let whiteList = {desktop: true, id: true, mobile: true, tablet: true, };
-    let params = {};
-    Object.keys(incomingParams).forEach(key => {
-      if (whiteList[key]) { params[key] = incomingParams[key]; }
-    });
-    return params;
+  urlParams (merge) {
+    return this.params(['desktop', 'id', 'mobile', 'tablet'], merge);
   }
 }
 
