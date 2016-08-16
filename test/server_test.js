@@ -64,4 +64,41 @@ describe('routes', () => {
       .end(done);
     });
   });
+  describe('POST /urls', () => {
+    let app, server, mockAvailStr, mockFind, mockInsert;
+    before(done => {
+      var mockFind = function () {
+        return new Promise(res => res({}));
+      }
+      Util.mockUrl({
+        AvailableRandomString: () => {
+          return new Promise(res => res('MockRandomString'));
+        },
+        find: () => { return new Promise(res => res('MockUrl')); },
+        insert: () => { return new Promise(res => res('MockInsertOpts')) }
+      });
+      app = require('../app')({quiet: true});
+      server = app.listen(3000);
+      Util.dropAndCreateTableUrls(() => {
+        done();
+      });
+    });
+    after((done) => {
+      Util.disableMockery();
+      server.close();
+      Util.dropTableUrls(() => {
+        done();
+      });
+    });
+    it('calls Url::find', (done) => {
+      request(app)
+        .post('/urls')
+        .send({'short': ''})
+        .expect(200)
+        .expect(res => {
+          expect(res.body).to.equal('MockUrl');
+        })
+        .end(done);
+    });
+  });
 });
