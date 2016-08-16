@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {},
+  "scripts": {
+    "setup": "./import_db.sh",
+    "start": "node server.js",
+    "test": "mocha"
+  },
   "author": "Andrew Williams",
   "dependencies": {
     "express": "^4.14.0",
@@ -12,6 +16,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "mockery": "^1.7.0",
     "supertest": "^2.0.0"
   }
