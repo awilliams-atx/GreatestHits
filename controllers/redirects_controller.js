@@ -26,7 +26,8 @@ class RedirectsController extends ApplicationController {
       blockToString: { desktopHits: true, mobileHits: true, tabletHits: true, desktopRedirects: true, mobileRedirects: true, tabletRedirects: true},
       set: setOptions,
       where: { id: url.attributes.id },
-      done: false
+      done: false,
+      quiet: this.miscParams().quiet
     }).then(op => {
       return Url.find(QueryHelper.toFind
         (Object.assign(op, {done: true, Constructor: Url})));
@@ -39,7 +40,8 @@ class RedirectsController extends ApplicationController {
     let path = nodeUrl.parse(this.req.url).pathname;
     let device = RedirectsController.checkPhoneString(this.req.device.type);
     Url.where({
-      Constructor: Url, tableName: 'urls', where: { short: path }
+      Constructor: Url, tableName: 'urls', where: { short: path },
+        quiet: this.miscParams().quiet
     }).then(urls => {
       if (urls.length === 0) {
         this.res.sendStatus(404);
@@ -61,6 +63,10 @@ class RedirectsController extends ApplicationController {
       console.error(err);
       this.res.sendStatus(500);
     });
+  }
+
+  miscParams () {
+    return this.params(['quiet']);
   }
 }
 
