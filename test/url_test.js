@@ -334,4 +334,26 @@ describe('Url model', function () {
       });
     });
   });
+  describe('::AvailableRandomString', () => {
+    before(done => {
+      Util.dropAndCreateTableUrls(() => {
+        done();
+      });
+    });
+    after(done => {
+      Util.dropTableUrls(() => {
+        done();
+      });
+    });
+    it('returns a random, 12-digit url-safe string', () => {
+      return Promise.all([
+        Url.AvailableRandomString({quiet: true}).should.eventually
+          .have.property('substring'),
+        Url.AvailableRandomString({quiet: true}).should.eventually
+          .have.length(12),
+        Url.AvailableRandomString().should.eventually
+          .match(/^[a-zA-Z0-9_-]*$/)
+      ]);
+    });
+  });
 });
