@@ -42,14 +42,13 @@ class UrlsController extends ApplicationController {
   create () {
     Url.AvailableRandomString()
       .then(str => {
+        let urlParams = this.urlParams({short: '/' + str});
         return Url.insert({
-          attributes: this.urlParams({short: '/' + str}), tableName: 'urls',
-            done: false,
+          attributes: urlParams, tableName: 'urls', done: false, Constructor: Url
         });
       }).then((op) => {
-        return Url.find(Object.assign(op, {
-          tableName: 'urls', Constructor: Url, id: op.id, done: true
-        }));
+        Object.assign(op, {done: true});
+        return Url.find(op);
       }).then(url => {
         this.res.status(200).json(url);
       }).catch(err => {
@@ -59,7 +58,7 @@ class UrlsController extends ApplicationController {
   }
 
   urlParams (merge) {
-    return this.params(['desktop', 'id', 'mobile', 'tablet'], merge);
+    return this.params(['desktop', 'id', 'mobile', 'tablet', 'desktopHits', 'mobileHits', 'tabletHits', 'desktopRedirects', 'mobileRedirects', 'tabletRedirects'], merge);
   }
 }
 
