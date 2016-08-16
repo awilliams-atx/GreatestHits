@@ -38,7 +38,7 @@ describe('Url model', function () {
     it('::update rejects with error', (done) => {
       Url.update({
         tableName: 'urls',
-        set: { long: 'http://www.google.com/' },
+        set: { short: 'http://www.google.com/' },
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
     });
@@ -46,19 +46,19 @@ describe('Url model', function () {
       Url.insert({
         tableName: 'urls',
         quiet: true,
-        attributes: { long: 'http://www.google.com/'}
+        attributes: { short: 'http://www.google.com/'}
       }).should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('::where rejects with error', (done) => {
       Url.where({
         tableName: 'urls',
-        where: { long: 'http://www.google.com/' },
+        where: { short: 'http://www.google.com/' },
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('#insert rejects with error', (done) => {
       let url = new Url({
-        long: 'http://www.google.com/'
+        short: 'http://www.google.com/'
       });
       url.insert({
         quiet: true,
@@ -68,7 +68,7 @@ describe('Url model', function () {
     it('#update rejects with error', (done) => {
       let url = new Url({
         id: 1,
-        long: 'http://www.google.com/'
+        short: 'http://www.google.com/'
       });
       url.update({
         quiet: true
@@ -99,7 +99,7 @@ describe('Url model', function () {
     it('::where returns empty array', (done) => {
       Url.where({
         tableName: 'urls',
-        conditions: { long: 'http://www.google.com' },
+        conditions: { short: 'http://www.google.com' },
         Constructor: Url,
         quiet: true
       }).should.eventually.deep.equal([]).notify(done);
@@ -163,7 +163,7 @@ describe('Url model', function () {
         Util.dropAndCreateTableUrls(() => {
           Url.insert({
             tableName: 'urls',
-            attributes: {long: 'http://www.sqlzoo.com/'},
+            attributes: {short: 'http://www.sqlzoo.com/'},
             quiet: true
           }).then(() => {
             done();
@@ -179,7 +179,7 @@ describe('Url model', function () {
       it('inserts a record', (done) => {
         Util.selectSqlZoo((row) => {
           row.should.have.deep.property('id', 1);
-          row.should.have.deep.property('long', 'http://www.sqlzoo.com/');
+          row.should.have.deep.property('short', 'http://www.sqlzoo.com/');
           done();
         });
       });
@@ -209,7 +209,7 @@ describe('Url model', function () {
       it('returns an empty array when no matches found', (done) => {
         var url = Url.where({
           tableName: 'urls',
-          where: { long: 'http://www.amazon.com/' },
+          where: { short: 'http://www.amazon.com/' },
           quiet: true
         });
         url.should.eventually.deep.equal([]).notify(done);
@@ -217,16 +217,16 @@ describe('Url model', function () {
       it('returns an array with single matching url objects', (done) => {
         var url = Url.where({
           tableName: 'urls',
-          where: { long: 'http://www.google.com/' },
+          where: { short: 'http://www.google.com/' },
           quiet: true
         });
         url.should.eventually.have.deep
-          .property('[0].long', 'http://www.google.com/').notify(done);
+          .property('[0].short', 'http://www.google.com/').notify(done);
       });
       it('returns an array with several matching url objects', (done) => {
         var url = Url.where({
           tableName: 'urls',
-          where: { long: 'http://www.yahoo.com/' },
+          where: { short: 'http://www.yahoo.com/' },
           quiet: true
         });
         url.should.eventually.have.length(2).notify(done);
@@ -235,7 +235,7 @@ describe('Url model', function () {
         var url = Url.where({
           Constructor: Url,
           tableName: 'urls',
-          where: { long: 'http://www.google.com/' },
+          where: { short: 'http://www.google.com/' },
           quiet: true
         });
         url.should.eventually.have.deep
@@ -250,7 +250,7 @@ describe('Url model', function () {
               Url.update({
                 tableName: 'urls',
                 where: { id: 1 },
-                set: { long: 'http://www.gooogle.com/' },
+                set: { short: 'http://www.gooogle.com/' },
                 done: true,
                 quiet: true
               }).then(() => {
@@ -266,7 +266,7 @@ describe('Url model', function () {
         });
         it('single matching row', (done) => {
           Util.selectGooogle(row => {
-            row.should.have.deep.property('long', 'http://www.gooogle.com/');
+            row.should.have.deep.property('short', 'http://www.gooogle.com/');
             done();
           });
         });
@@ -278,8 +278,8 @@ describe('Url model', function () {
               Util.insertYahoo(() => {
                 Url.update({
                   tableName: 'urls',
-                  set: { long: 'http://www.sqlzoo.com/' },
-                  where: { long: 'http://www.google.com/' },
+                  set: { short: 'http://www.sqlzoo.com/' },
+                  where: { short: 'http://www.google.com/' },
                   done: true,
                   quiet: true
                 }).then(() => {
@@ -296,8 +296,8 @@ describe('Url model', function () {
         });
         it('matching rows only', (done) => {
           Util.selectAll(rows => {
-            rows[0].long.should.equal('http://www.sqlzoo.com/');
-            rows[1].long.should.equal('http://www.yahoo.com/');
+            rows[0].short.should.equal('http://www.sqlzoo.com/');
+            rows[1].short.should.equal('http://www.yahoo.com/');
             done();
           });
         });
@@ -309,7 +309,7 @@ describe('Url model', function () {
               Util.insertYahoo(() => {
                 Url.update({
                   tableName: 'urls',
-                  set: { long: 'http://www.sqlzoo.com/' },
+                  set: { short: 'http://www.sqlzoo.com/' },
                   done: true,
                   quiet: true
                 }).then(() => {
@@ -326,8 +326,8 @@ describe('Url model', function () {
         });
         it('all rows', (done) => {
           Util.selectAll(rows => {
-            rows[0].long.should.equal('http://www.sqlzoo.com/');
-            rows[1].long.should.equal('http://www.sqlzoo.com/');
+            rows[0].short.should.equal('http://www.sqlzoo.com/');
+            rows[1].short.should.equal('http://www.sqlzoo.com/');
             done();
           });
         });

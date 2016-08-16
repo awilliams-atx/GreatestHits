@@ -12,7 +12,7 @@ module.exports = {
   dropAndCreateTableUrls: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(() => {
-        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, long TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
+        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
           db.close();
           cb && cb();
         });
@@ -30,7 +30,7 @@ module.exports = {
   insertGoogle: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(function () {
-        db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
+        db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
           db.close();
           cb && cb();
         });
@@ -39,7 +39,7 @@ module.exports = {
   },
   insertYahoo: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
+      db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
         db.close();
         cb && cb();
       });
@@ -69,7 +69,7 @@ module.exports = {
   },
   selectGooogle: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.get("SELECT * FROM urls WHERE long = 'http://www.gooogle.com/';"
+      db.get("SELECT * FROM urls WHERE short = 'http://www.gooogle.com/';"
         , [], (err, row) => {
         if (err) {
           db.close();
@@ -83,7 +83,7 @@ module.exports = {
   },
   selectSqlZoo: function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.get("SELECT * FROM urls WHERE long = 'http://www.sqlzoo.com/';"
+      db.get("SELECT * FROM urls WHERE short = 'http://www.sqlzoo.com/';"
         , [], (err, row) => {
         if (err) {
           db.close();
@@ -108,7 +108,7 @@ beforeEach(() => {
   dropAndCreateTableUrls = function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(() => {
-        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, long TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
+        db.run('DROP TABLE IF EXISTS urls;').run('CREATE TABLE urls (id INTEGER PRIMARY KEY AUTOINCREMENT, short TEXT NOT NULL, desktop TEXT, mobile TEXT, tablet TEXT, createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);', [], () => {
           db.close();
           cb && cb();
         });
@@ -126,7 +126,7 @@ beforeEach(() => {
   insertGoogle = function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
       db.serialize(function () {
-        db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
+        db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.google.com/', '54354gdsm', 'fdjs8f98f2', '0sd9fj23', datetime(), datetime());", [], () => {
           db.close();
           cb && cb();
         });
@@ -135,7 +135,7 @@ beforeEach(() => {
   };
   insertYahoo = function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.run("INSERT INTO urls (long, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
+      db.run("INSERT INTO urls (short, desktop, mobile, tablet, createdAt, updatedAt) VALUES ('http://www.yahoo.com/', '5teff2', 'dsf234f', 'h7j8rwece', datetime(), datetime());", [], () => {
         db.close();
         cb && cb();
       });
@@ -157,7 +157,7 @@ beforeEach(() => {
   }
   selectGooogle = function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.get("SELECT * FROM urls WHERE long = 'http://www.gooogle.com/';"
+      db.get("SELECT * FROM urls WHERE short = 'http://www.gooogle.com/';"
         , [], (err, row) => {
         if (err) {
           db.close();
@@ -171,7 +171,7 @@ beforeEach(() => {
   };
   selectSqlZoo = function (cb) {
     let db = new sqlite3.Database('./data.db', () => {
-      db.get("SELECT * FROM urls WHERE long = 'http://www.sqlzoo.com/';"
+      db.get("SELECT * FROM urls WHERE short = 'http://www.sqlzoo.com/';"
         , [], (err, row) => {
         if (err) {
           db.close();
