@@ -42,4 +42,26 @@ describe('routes', () => {
       });
     });
   });
+  describe('GET /urls', () => {
+    let app, server;
+    before(done => {
+      Util.mockUrl({ all: () => { return new Promise(res => res([{},{}])) } });
+      app = require('../app')({quiet: true});
+      server = app.listen(3000);
+      done();
+    });
+    after(() => {
+      Util.disableMockery();
+      server.close();
+    });
+    it('returns all urls', (done) => {
+      request(app)
+      .get('/urls')
+      .expect(200)
+      .expect(res => {
+        expect(res.body).to.be.instanceof(Array).with.length(2)
+      })
+      .end(done);
+    });
+  });
 });

@@ -1,12 +1,24 @@
 'use strict';
-const Url = require('../models/url.js'),
-      mockery = require('mockery');
+const Url = require('../models/url.js');
 
 class UrlsController {
   constructor (req, res, next) {
     this.req = req;
     this.res = res;
     this.next = next;
+  }
+
+  index () {
+    Url.all({
+      tableName: 'urls',
+      Constructor: Url,
+      done: true
+    }).then((urls) => {
+      this.res.json(urls).status(200);
+    }).catch(err => {
+      console.error(err);
+      this.res.send(500);
+    });
   }
 
   show () {
@@ -18,7 +30,7 @@ class UrlsController {
       if (url === null) {
         this.res.status(404).send('Url not found');
       } else {
-        this.res.json(url);
+        this.res.json(url).status(200);
       }
     }).catch(err => {
       console.error(err);
