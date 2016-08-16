@@ -45,6 +45,7 @@ describe('Url model', function () {
     it('::insert rejects with error', (done) => {
       Url.insert({
         tableName: 'urls',
+        Constructor: Url,
         quiet: true,
         attributes: { short: 'http://www.google.com/'}
       }).should.eventually.be.rejectedWith(Error).notify(done);
@@ -53,24 +54,6 @@ describe('Url model', function () {
       Url.where({
         tableName: 'urls',
         where: { short: 'http://www.google.com/' },
-        quiet: true
-      }).should.eventually.be.rejectedWith(Error).notify(done);
-    });
-    it('#insert rejects with error', (done) => {
-      let url = new Url({
-        short: 'http://www.google.com/'
-      });
-      url.insert({
-        quiet: true,
-        done: true
-      }).should.eventually.be.rejectedWith(Error).notify(done);
-    });
-    it('#update rejects with error', (done) => {
-      let url = new Url({
-        id: 1,
-        short: 'http://www.google.com/'
-      });
-      url.update({
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
     });
@@ -203,30 +186,30 @@ describe('Url model', function () {
           });
         });
       });
-      after(done => {
+      afterEach(done => {
         Util.dropTableUrls(done);
       });
       it('returns an empty array when no matches found', (done) => {
-        var url = Url.where({
+        Url.where({
           tableName: 'urls',
           where: { short: 'http://www.amazon.com/' },
           quiet: true
-        });
-        url.should.eventually.deep.equal([]).notify(done);
+        }).should.eventually.deep.equal([]).notify(done);
       });
-      it('returns an array with single matching url objects', (done) => {
-        var url = Url.where({
+      it('returns an array with single matching url object', (done) => {
+        Url.where({
           tableName: 'urls',
-          where: { short: 'http://www.google.com/' },
+          where: { desktop: 'http://www.google.com/' },
+          Constructor: Url,
           quiet: true
-        });
-        url.should.eventually.have.deep
-          .property('[0].short', 'http://www.google.com/').notify(done);
+        }).should.eventually.have.deep
+          .property('[0].attributes.desktop', 'http://www.google.com/')
+          .notify(done);
       });
       it('returns an array with several matching url objects', (done) => {
         var url = Url.where({
           tableName: 'urls',
-          where: { short: 'http://www.yahoo.com/' },
+          where: { desktop: 'http://www.yahoo.com/' },
           quiet: true
         });
         url.should.eventually.have.length(2).notify(done);
@@ -235,7 +218,7 @@ describe('Url model', function () {
         var url = Url.where({
           Constructor: Url,
           tableName: 'urls',
-          where: { short: 'http://www.google.com/' },
+          where: { desktop: 'http://www.google.com/' },
           quiet: true
         });
         url.should.eventually.have.deep
@@ -278,8 +261,8 @@ describe('Url model', function () {
               Util.insertYahoo(() => {
                 Url.update({
                   tableName: 'urls',
-                  set: { short: 'http://www.sqlzoo.com/' },
-                  where: { short: 'http://www.google.com/' },
+                  set: { desktop: 'http://www.sqlzoo.com/' },
+                  where: { desktop: 'http://www.google.com/' },
                   done: true,
                   quiet: true
                 }).then(() => {
@@ -296,8 +279,8 @@ describe('Url model', function () {
         });
         it('matching rows only', (done) => {
           Util.selectAll(rows => {
-            rows[0].short.should.equal('http://www.sqlzoo.com/');
-            rows[1].short.should.equal('http://www.yahoo.com/');
+            rows[0].desktop.should.equal('http://www.sqlzoo.com/');
+            rows[1].desktop.should.equal('http://www.yahoo.com/');
             done();
           });
         });
