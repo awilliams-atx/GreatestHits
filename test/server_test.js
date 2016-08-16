@@ -3,7 +3,8 @@
 const request = require('supertest'),
       chai = require('chai'),
       expect = chai.expect,
-      mockery = require('mockery');
+      mockery = require('mockery'),
+      Util = require('./Util.js');
 
 describe('routes', () => {
   var mockUrl = (mock) => {
