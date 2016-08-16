@@ -1,6 +1,6 @@
 # GreatestHits
 
-GreatestHits is an ad-tech URL shortener and management system. Star features include:
+GreatestHits is a URL shortener and management system. Star features include:
 
 * JSON API.
 * URL age and number of requests tracked based on requesting device type.
