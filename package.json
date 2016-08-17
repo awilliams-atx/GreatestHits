@@ -4,7 +4,6 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "setup": "./import_db.sh",
     "start": "node server.js",
     "test": "mocha"
   },
