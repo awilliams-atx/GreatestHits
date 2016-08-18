@@ -32,6 +32,14 @@ class Url extends DBObject {
     });
   }
 
+  static dbProps (prop) {
+    switch (prop) {
+    case 'tableName':
+      return 'urls';
+      break;
+    }
+  }
+
   static defaults (op) {
     let short = op.attributes.short;
     short = (short.match(/^\//)) ? short : '/' + short;
