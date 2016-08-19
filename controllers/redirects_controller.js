@@ -39,30 +39,28 @@ class RedirectsController extends ApplicationController {
   redirect () {
     let path = nodeUrl.parse(this.req.url).pathname;
     let device = RedirectsController.checkPhoneString(this.req.device.type);
-    Url.where({
-      Constructor: Url, tableName: 'urls', where: { short: path },
-        quiet: this.miscParams().quiet
-    }).then(urls => {
-      if (urls.length === 0) {
-        this.res.sendStatus(404);
-      } else {
-        let url = urls[0];
-        let redirects = undefined;
-        if (url.attributes[device]) {
-          redirects = device + 'Redirects';
-          this.res.redirect(url.attributes[device]);
-        } else if (url.attributes['desktop']){
-          redirects = 'desktopRedirects';
-          this.res.redirect(url.attributes['desktop']);
-        } else {
+    Url.where({ where: { short: path }, quiet: this.miscParams().quiet})
+      .then(urls => {
+        if (urls.length === 0) {
           this.res.sendStatus(404);
+        } else {
+          let url = urls[0];
+          let redirects = undefined;
+          if (url.attributes[device]) {
+            redirects = device + 'Redirects';
+            this.res.redirect(url.attributes[device]);
+          } else if (url.attributes['desktop']){
+            redirects = 'desktopRedirects';
+            this.res.redirect(url.attributes['desktop']);
+          } else {
+            this.res.sendStatus(404);
+          }
+          this.hit(url, `${device}Hits`, redirects);
         }
-        this.hit(url, `${device}Hits`, redirects);
-      }
-    }).catch(err => {
-      console.error(err);
-      this.res.sendStatus(500);
-    });
+      }).catch(err => {
+        console.error(err);
+        this.res.sendStatus(500);
+      });
   }
 
   miscParams () {

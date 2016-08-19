@@ -13,21 +13,18 @@ class Url extends DBObject {
     op = op || { db: this.open() };
     let string = Crypto.randomBytes(6).toString('hex');
     return new Promise((res, rej) => {
-      Url.where({
-        where: { short: string },
-        done: false,
-        quiet: true
-      }).then(op => {
-        if (op.rows.length === 0) {
-          op.db.close();
-          res(string);
-        } else {
-          return Url.availableRandomString(op);
-        }
-      }).catch(err => {
-        console.error(err);
-        rej(err);
-      });
+      Url.where({ where: { short: string }, done: false, quiet: true})
+        .then(op => {
+          if (op.rows.length === 0) {
+            op.db.close();
+            res(string);
+          } else {
+            return Url.availableRandomString(op);
+          }
+        }).catch(err => {
+          console.error(err);
+          rej(err);
+        });
     });
   }
 

@@ -65,9 +65,7 @@ describe('Url model', function () {
     });
     it('::where returns empty array', (done) => {
       Url.where({
-        tableName: 'urls',
         conditions: { short: 'http://www.google.com' },
-        Constructor: Url,
         quiet: true
       }).should.eventually.deep.equal([]).notify(done);
     });
@@ -160,16 +158,13 @@ describe('Url model', function () {
       });
       it('returns an empty array when no matches found', (done) => {
         Url.where({
-          tableName: 'urls',
           where: { short: 'http://www.amazon.com/' },
           quiet: true
         }).should.eventually.deep.equal([]).notify(done);
       });
       it('returns an array with single matching url object', (done) => {
         Url.where({
-          tableName: 'urls',
           where: { desktop: 'http://www.google.com/' },
-          Constructor: Url,
           quiet: true
         }).should.eventually.have.deep
           .property('[0].attributes.desktop', 'http://www.google.com/')
@@ -177,7 +172,6 @@ describe('Url model', function () {
       });
       it('returns an array with several matching url objects', (done) => {
         var url = Url.where({
-          tableName: 'urls',
           where: { desktop: 'http://www.yahoo.com/' },
           quiet: true
         });
@@ -186,7 +180,6 @@ describe('Url model', function () {
       it('returns Url instances when given Constructor', (done) => {
         var url = Url.where({
           Constructor: Url,
-          tableName: 'urls',
           where: { desktop: 'http://www.google.com/' },
           quiet: true
         });
