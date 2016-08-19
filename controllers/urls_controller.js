@@ -10,14 +10,13 @@ class UrlsController extends ApplicationController {
   }
 
   index () {
-    Url.all({
-      done: true
-    }).then((urls) => {
-      this.res.json(urls).status(200);
-    }).catch(err => {
-      console.error(err);
-      this.res.send(500);
-    });
+    Url.all()
+      .then(urls => {
+        this.res.json(urls).status(200);
+      }).catch(err => {
+        console.error(err);
+        this.res.send(500);
+      });
   }
 
   show () {

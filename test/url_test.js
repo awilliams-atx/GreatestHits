@@ -22,8 +22,7 @@ describe('Url model', function () {
       });
     });
     it('::all rejects with error', (done) => {
-      Url.all({ quiet: true})
-        .should.eventually.be.rejectedWith(Error).notify(done);
+      Url.all().should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('::find rejects with error', (done) => {
       Url.find({
@@ -63,9 +62,7 @@ describe('Url model', function () {
       Util.dropTableUrls(done);
     });
     it('::all returns empty array', (done) => {
-      Url.all({
-        tableName: 'urls'
-      }).should.eventually.be.instanceof(Array).with.length(0).notify(done);
+      Url.all().should.eventually.be.instanceof(Array).with.length(0).notify(done);
     });
     it('::find returns null', (done) => {
       Url.find({
@@ -94,15 +91,11 @@ describe('Url model', function () {
         });
       });
       it('returns one-item array', (done) => {
-        Url.all({
-          tableName: 'urls',
-        }).should.eventually.have.length(1).notify(done);
+        Url.all().should.eventually.have.length(1).notify(done);
       });
       it('returns two-item array', (done) => {
         Util.insertYahoo(() => {
-          Url.all({
-            tableName: 'urls'
-          }).should.eventually.have.length(2).notify(done);
+          Url.all().should.eventually.have.length(2).notify(done);
         });
       });
     });
