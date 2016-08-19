@@ -9,13 +9,12 @@ class Url extends DBObject {
     this.attributes = attributes || {};
   }
 
-  static AvailableRandomString (op) {
+  static availableRandomString (op) {
+    op = op || { db: this.open() };
     let string = Crypto.randomBytes(6).toString('hex');
     return new Promise((res, rej) => {
       Url.where({
-        tableName: 'urls',
         where: { short: string },
-        db: op ? op.db : undefined,
         done: false,
         quiet: true
       }).then(op => {
@@ -23,7 +22,7 @@ class Url extends DBObject {
           op.db.close();
           res(string);
         } else {
-          return Url.AvailableRandomString(op);
+          return Url.availableRandomString(op);
         }
       }).catch(err => {
         console.error(err);

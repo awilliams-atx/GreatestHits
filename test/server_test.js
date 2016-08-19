@@ -64,7 +64,7 @@ describe('routes', () => {
     before(done => {
       Util.enableMockery();
       Util.mockUrl({
-        AvailableRandomString: () => {
+        availableRandomString: () => {
           return new Promise(res => res('MockRandomString'));
         },
         find: () => { return new Promise(res => res('MockUrl')); },

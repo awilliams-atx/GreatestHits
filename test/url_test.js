@@ -315,7 +315,7 @@ describe('Url model', function () {
       });
     });
   });
-  describe('::AvailableRandomString', () => {
+  describe('::availableRandomString', () => {
     before(done => {
       Util.dropAndCreateTableUrls(() => {
         done();
@@ -328,11 +328,11 @@ describe('Url model', function () {
     });
     it('returns a random, 12-digit url-safe string', () => {
       return Promise.all([
-        Url.AvailableRandomString({quiet: true}).should.eventually
+        Url.availableRandomString({quiet: true}).should.eventually
           .have.property('substring'),
-        Url.AvailableRandomString({quiet: true}).should.eventually
+        Url.availableRandomString({quiet: true}).should.eventually
           .have.length(12),
-        Url.AvailableRandomString().should.eventually
+        Url.availableRandomString().should.eventually
           .match(/^[a-zA-Z0-9_-]*$/)
       ]);
     });

@@ -11,8 +11,6 @@ class UrlsController extends ApplicationController {
 
   index () {
     Url.all({
-      tableName: 'urls',
-      Constructor: Url,
       done: true
     }).then((urls) => {
       this.res.json(urls).status(200);
@@ -41,7 +39,7 @@ class UrlsController extends ApplicationController {
   }
 
   create () {
-    Url.AvailableRandomString()
+    Url.availableRandomString()
       .then(str => {
         let urlParams = this.urlParams({short: '/' + str});
         return Url.insert({
