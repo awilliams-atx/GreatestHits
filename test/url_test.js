@@ -179,12 +179,11 @@ describe('Url model', function () {
       });
       it('returns Url instances when given Constructor', (done) => {
         var url = Url.where({
-          Constructor: Url,
           where: { desktop: 'http://www.google.com/' },
           quiet: true
         });
         url.should.eventually.have.deep
-          .property('[0].tableName').notify(done);
+          .property('[0].attributes').notify(done);
       });
     });
     describe('::update', () => {
@@ -193,7 +192,6 @@ describe('Url model', function () {
           Util.dropAndCreateTableUrls(() => {
             Util.insertGoogle(() => {
               Url.update({
-                tableName: 'urls',
                 where: { id: 1 },
                 set: { short: 'http://www.gooogle.com/' },
                 done: true,
@@ -222,7 +220,6 @@ describe('Url model', function () {
             Util.insertGoogle(() => {
               Util.insertYahoo(() => {
                 Url.update({
-                  tableName: 'urls',
                   set: { desktop: 'http://www.sqlzoo.com/' },
                   where: { desktop: 'http://www.google.com/' },
                   done: true,
@@ -253,7 +250,6 @@ describe('Url model', function () {
             Util.insertGoogle(() => {
               Util.insertYahoo(() => {
                 Url.update({
-                  tableName: 'urls',
                   set: { short: 'http://www.sqlzoo.com/' },
                   done: true,
                   quiet: true
