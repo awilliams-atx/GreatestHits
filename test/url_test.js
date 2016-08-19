@@ -26,8 +26,6 @@ describe('Url model', function () {
     });
     it('::find rejects with error', (done) => {
       Url.find({
-        tableName: 'urls',
-        Constructor: Url,
         id: 5,
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
@@ -66,8 +64,6 @@ describe('Url model', function () {
     });
     it('::find returns null', (done) => {
       Url.find({
-        Constructor: Url,
-        tableName: 'urls',
         id: 1,
         quiet: true
       }).should.eventually.equal(null).notify(done);
@@ -108,12 +104,13 @@ describe('Url model', function () {
         });
       });
       it('returns null when id not in table', (done) => {
-        Url.find({tableName: 'urls', Constructor: Url, id: 2, quiet: true}).should.eventually.equal(null).notify(done);
+        Url.find({
+          id: 2,
+          quiet: true
+        }).should.eventually.equal(null).notify(done);
       });
       it('returns a JS wrapped database object', (done) => {
         Url.find({
-          tableName: 'urls',
-          Constructor: Url,
           id: 1,
           quiet: true
         }).should.eventually.be.an.instanceof(Url).notify(done);
@@ -121,8 +118,6 @@ describe('Url model', function () {
       it('returns the correct object', (done) => {
         Util.insertYahoo(() => {
           Url.find({
-            tableName: 'urls',
-            Constructor: Url,
             id: 2,
             quiet: true
           }).should.eventually.be.an.instanceof(Url)

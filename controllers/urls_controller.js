@@ -21,8 +21,6 @@ class UrlsController extends ApplicationController {
 
   show () {
     Url.find({
-      tableName: 'urls',
-      Constructor: Url,
       id: this.urlParams().id,
       quiet: this.miscParams().quiet
     }).then(url => {
