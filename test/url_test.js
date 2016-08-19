@@ -22,10 +22,8 @@ describe('Url model', function () {
       });
     });
     it('::all rejects with error', (done) => {
-      Url.all({
-        tableName: 'urls',
-        quiet: true
-      }).should.eventually.be.rejectedWith(Error).notify(done);
+      Url.all({ quiet: true})
+        .should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('::find rejects with error', (done) => {
       Url.find({
@@ -37,7 +35,6 @@ describe('Url model', function () {
     });
     it('::update rejects with error', (done) => {
       Url.update({
-        tableName: 'urls',
         set: { short: 'http://www.google.com/' },
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
@@ -52,7 +49,6 @@ describe('Url model', function () {
     });
     it('::where rejects with error', (done) => {
       Url.where({
-        tableName: 'urls',
         where: { short: 'http://www.google.com/' },
         quiet: true
       }).should.eventually.be.rejectedWith(Error).notify(done);
