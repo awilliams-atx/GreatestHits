@@ -20,19 +20,18 @@ class UrlsController extends ApplicationController {
   }
 
   show () {
-    Url.find({
-      id: this.urlParams().id,
-      quiet: this.miscParams().quiet
-    }).then(url => {
-      if (url === null) {
-        this.res.status(404).send('Url not found');
-      } else {
-        this.res.json(url).status(200);
-      }
-    }).catch(err => {
-      console.error(err);
-      this.res.sendStatus(500);
-    });
+    Url.find(this.urlParams().id, { quiet: this.miscParams().quiet })
+      .then(url => {
+        if (url === null) {
+          this.res.status(404).send('Url not found');
+        } else {
+          this.res.json(url).status(200);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        this.res.sendStatus(500);
+      });
   }
 
   create () {
@@ -42,9 +41,9 @@ class UrlsController extends ApplicationController {
         return Url.insert({
           attributes: urlParams, tableName: 'urls', done: false, quiet: this.miscParams().quiet, Constructor: Url
         });
-      }).then((op) => {
+      }).then(op => {
         Object.assign(op, {done: true});
-        return Url.find(op);
+        return Url.find(op.id, op);
       }).then(url => {
         this.res.status(200).json(url);
       }).catch(err => {

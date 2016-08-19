@@ -25,10 +25,8 @@ describe('Url model', function () {
       Url.all().should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('::find rejects with error', (done) => {
-      Url.find({
-        id: 5,
-        quiet: true
-      }).should.eventually.be.rejectedWith(Error).notify(done);
+      Url.find(5, {quiet: true})
+        .should.eventually.be.rejectedWith(Error).notify(done);
     });
     it('::update rejects with error', (done) => {
       Url.update({
@@ -63,10 +61,7 @@ describe('Url model', function () {
       Url.all().should.eventually.be.instanceof(Array).with.length(0).notify(done);
     });
     it('::find returns null', (done) => {
-      Url.find({
-        id: 1,
-        quiet: true
-      }).should.eventually.equal(null).notify(done);
+      Url.find(1, {quiet: true}).should.eventually.equal(null).notify(done);
     });
     it('::where returns empty array', (done) => {
       Url.where({
@@ -79,7 +74,7 @@ describe('Url model', function () {
   });
   describe('when table has rows', () => {
     describe('::all', () => {
-      beforeEach((done) => {
+      beforeEach(done => {
         Util.dropAndCreateTableUrls(() => {
           Util.insertGoogle(() => {
             done();
@@ -104,23 +99,15 @@ describe('Url model', function () {
         });
       });
       it('returns null when id not in table', (done) => {
-        Url.find({
-          id: 2,
-          quiet: true
-        }).should.eventually.equal(null).notify(done);
+        Url.find(2, {quiet: true}).should.eventually.equal(null).notify(done);
       });
       it('returns a JS wrapped database object', (done) => {
-        Url.find({
-          id: 1,
-          quiet: true
-        }).should.eventually.be.an.instanceof(Url).notify(done);
+        Url.find(1, {quiet: true})
+          .should.eventually.be.an.instanceof(Url).notify(done);
       });
       it('returns the correct object', (done) => {
         Util.insertYahoo(() => {
-          Url.find({
-            id: 2,
-            quiet: true
-          }).should.eventually.be.an.instanceof(Url)
+          Url.find(2, {quiet: true}).should.eventually.be.an.instanceof(Url)
             .with.deep.property('attributes.id', 2).notify(done);
         });
       });

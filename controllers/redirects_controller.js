@@ -29,7 +29,7 @@ class RedirectsController extends ApplicationController {
       done: false,
       quiet: this.miscParams().quiet
     }).then(op => {
-      return Url.find(QueryHelper.toFind
+      return Url.find(op.id, QueryHelper.toFind
         (Object.assign(op, {done: true, Constructor: Url})));
     }).catch(err => {
       console.error(err);

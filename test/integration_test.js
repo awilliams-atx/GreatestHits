@@ -11,7 +11,7 @@ const Url = require('../models/url');
 describe('integration', () => {
   let app, server;
   describe('POST /urls', () => {
-    before((done) => {
+    before(done => {
       app = require('../app')({quiet: true});
       server = app.listen(3000);
       Util.dropAndCreateTableUrls(() => {
@@ -64,9 +64,9 @@ describe('integration', () => {
         .get('/urls')
         .expect(200)
         .expect(res => {
-          res.body.should.have.length(2);
-          res.body[0].should.have.deep.property('attributes.mobileHits', 0);
-          res.body[1].should.have.deep
+          expect(res.body).to.have.length(2);
+          expect(res.body[0]).to.have.deep.property('attributes.mobileHits', 0);
+          expect(res.body[1]).to.have.deep
             .property('attributes.desktop', 'http://www.yahoo.com/');
         })
         .end(done);
@@ -133,8 +133,8 @@ describe('integration', () => {
         .send({quiet: true})
         .expect(res => {
           yahooShort = res.body.attributes.short;
-          res.body.attributes.id.should.equal(2);
-          res.body.attributes.desktop.should.equal('http://www.yahoo.com/');
+          expect(res.body.attributes.id).to.equal(2);
+          expect(res.body.attributes.desktop).to.equal('http://www.yahoo.com/');
         })
         .end(() => {
           request(app)
@@ -142,7 +142,7 @@ describe('integration', () => {
             .send({quiet: true})
             .expect(302)
             .expect(res => {
-              res.headers.location.should
+              expect(res.headers.location).to
                 .equal('http://www.yahoo.com/mobile/');
             })
             .end(done);
@@ -155,8 +155,8 @@ describe('integration', () => {
         .send({quiet: true})
         .expect(res => {
           yahooShort = res.body.attributes.short;
-          res.body.attributes.id.should.equal(2);
-          res.body.attributes.desktop.should.equal('http://www.yahoo.com/');
+          expect(res.body.attributes.id).to.equal(2);
+          expect(res.body.attributes.desktop).to.equal('http://www.yahoo.com/');
         })
         .end(() => {
           request(app)
@@ -164,7 +164,7 @@ describe('integration', () => {
             .send({quiet: true})
             .expect(302)
             .expect(res => {
-              res.headers.location.should
+              expect(res.headers.location).to
                 .equal('http://www.yahoo.com/mobile/');
             })
             .end(() => {
@@ -172,9 +172,9 @@ describe('integration', () => {
                 .get('/url/2')
                 .send({quiet: true})
                 .expect(res => {
-                  res.body.attributes.mobileHits.should.equal(1);
-                  res.body.attributes.mobileRedirects.should.equal(1);
-                  res.body.attributes.desktopHits.should.equal(0);
+                  expect(res.body.attributes.mobileHits).to.equal(1);
+                  expect(res.body.attributes.mobileRedirects).to.equal(1);
+                  expect(res.body.attributes.desktopHits).to.equal(0);
                 })
                 .end(done);
             });
