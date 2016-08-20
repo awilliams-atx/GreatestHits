@@ -37,9 +37,10 @@ class UrlsController extends ApplicationController {
   create () {
     Url.availableRandomString()
       .then(str => {
-        let urlParams = this.urlParams({short: '/' + str});
         return Url.insert({
-          attributes: urlParams, tableName: 'urls', done: false, quiet: this.miscParams().quiet, Constructor: Url
+          attributes: this.urlParams({short: '/' + str}),
+          done: false,
+          quiet: this.miscParams().quiet
         });
       }).then(op => {
         Object.assign(op, {done: true});

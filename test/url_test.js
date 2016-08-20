@@ -36,8 +36,6 @@ describe('Url model', function () {
     });
     it('::insert rejects with error', (done) => {
       Url.insert({
-        tableName: 'urls',
-        Constructor: Url,
         quiet: true,
         attributes: { short: 'http://www.google.com/'}
       }).should.eventually.be.rejectedWith(Error).notify(done);
@@ -114,8 +112,6 @@ describe('Url model', function () {
       beforeEach(done => {
         Util.dropAndCreateTableUrls(() => {
           Url.insert({
-            Constructor: Url,
-            tableName: 'urls',
             attributes: {short: '/h5g3n7m5k6h8', desktop: 'http://www.sqlzoo.com/'},
             quiet: true
           }).then(() => {
