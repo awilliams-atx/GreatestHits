@@ -42,24 +42,24 @@ class RedirectsController extends ApplicationController {
       .then(urls => {
         if (urls.length === 0) {
           this.res.sendStatus(404);
+      } else {
+        let url = urls[0];
+        let redirects = undefined;
+        if (url.attributes[device]) {
+          redirects = device + 'Redirects';
+          this.res.redirect(url.attributes[device]);
+        } else if (url.attributes['desktop']){
+          redirects = 'desktopRedirects';
+          this.res.redirect(url.attributes['desktop']);
         } else {
-          let url = urls[0];
-          let redirects = undefined;
-          if (url.attributes[device]) {
-            redirects = device + 'Redirects';
-            this.res.redirect(url.attributes[device]);
-          } else if (url.attributes['desktop']){
-            redirects = 'desktopRedirects';
-            this.res.redirect(url.attributes['desktop']);
-          } else {
-            this.res.sendStatus(404);
-          }
-          this.hit(url, `${device}Hits`, redirects);
+          this.res.sendStatus(404);
         }
-      }).catch(err => {
-        console.error(err);
-        this.res.sendStatus(500);
-      });
+        this.hit(url, `${device}Hits`, redirects);
+      }
+    }).catch(err => {
+      console.error(err);
+      this.res.sendStatus(500);
+    });
   }
 
   miscParams () {
