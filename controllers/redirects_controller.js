@@ -38,27 +38,14 @@ class RedirectsController extends ApplicationController {
 
   redirect () {
     let path = nodeUrl.parse(this.req.url).pathname;
-    if (path === '/') {
-      return this.next();
-    }
+    if (path === '/') { return this.next(); }
     let device = RedirectsController.checkPhoneString(this.req.device.type);
     Url.where({ where: { short: path }, quiet: this.miscParams().quiet })
       .then(urls => {
-        if (urls.length === 0) {
-          this.res.sendStatus(404);
+        if (urls.length > 0) {
+          this.processRedirect(urls[0], device);
         } else {
-          let url = urls[0];
-          let redirects = undefined;
-          if (url.attributes[device]) {
-            redirects = device + 'Redirects';
-            this.res.redirect(url.attributes[device]);
-          } else if (url.attributes['desktop']){
-            redirects = 'desktopRedirects';
-            this.res.redirect(url.attributes['desktop']);
-          } else {
-            this.res.sendStatus(404);
-          }
-          this.hit(url, `${device}Hits`, redirects);
+          this.res.sendStatus(404);
         }
       }).catch(err => {
         console.error(err);
@@ -66,8 +53,24 @@ class RedirectsController extends ApplicationController {
       });
   }
 
+  // PRIVATE
+
   miscParams () {
     return this.params(['quiet']);
+  }
+
+  processRedirect (url, device) {
+    let redirects;
+    if (url.attributes[device]) {
+      redirects = device + 'Redirects';
+      this.res.redirect(url.attributes[device]);
+    } else if (url.attributes['desktop']){
+      redirects = 'desktopRedirects';
+      this.res.redirect(url.attributes['desktop']);
+    } else {
+      this.res.sendStatus(404);
+    }
+    this.hit(url, `${device}Hits`, redirects);
   }
 }
 
