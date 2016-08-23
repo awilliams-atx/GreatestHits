@@ -15,8 +15,3 @@ CREATE TABLE urls (
   createdAt DATETIME NOT NULL,
   updatedAt DATETIME NOT NULL
 );
-
-INSERT INTO
-  urls (short, desktop, mobile, tablet, desktopHits, mobileHits, tabletHits, desktopRedirects, mobileRedirects, tabletRedirects, createdAt, updatedAt)
-VALUES
-  ('a', 'b', 'c', 'd', 0, 0, 0, 0, 0, 0, datetime(), datetime());
