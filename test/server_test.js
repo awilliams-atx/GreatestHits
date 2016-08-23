@@ -8,7 +8,7 @@ const request = require('supertest'),
 
 describe('routes', () => {
   let app;
-  describe('GET /url/:id', () => {
+  describe('GET /api/url/:id', () => {
     describe('url not found', () => {
       before(() => {
         Util.enableMockery();
@@ -20,7 +20,7 @@ describe('routes', () => {
       });
       it('responds 404', (done) => {
         request(app)
-          .get('/url/49')
+          .get('/api/url/49')
           .expect(404, done);
       });
     });
@@ -35,12 +35,12 @@ describe('routes', () => {
       });
       it('responds with url', (done) => {
         request(app)
-          .get('/url/87')
+          .get('/api/url/87')
           .expect(200, {}, done);
       });
     });
   });
-  describe('GET /urls', () => {
+  describe('GET /api/urls', () => {
     before(done => {
       Util.enableMockery();
       Util.mockUrl({ all: () => { return new Promise(res => res([{},{}])) } });
@@ -52,7 +52,7 @@ describe('routes', () => {
     });
     it('returns all urls', (done) => {
       request(app)
-      .get('/urls')
+      .get('/api/urls')
       .expect(200)
       .expect(res => {
         expect(res.body).to.be.instanceof(Array).with.length(2)
@@ -60,7 +60,7 @@ describe('routes', () => {
       .end(done);
     });
   });
-  describe('POST /urls', () => {
+  describe('POST /api/urls', () => {
     before(done => {
       Util.enableMockery();
       Util.mockUrl({
@@ -83,7 +83,7 @@ describe('routes', () => {
     });
     it('calls Url::find', (done) => {
       request(app)
-        .post('/urls')
+        .post('/api/urls')
         .send({'short': ''})
         .expect(200)
         .expect(res => {

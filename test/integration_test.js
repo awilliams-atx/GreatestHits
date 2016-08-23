@@ -10,9 +10,9 @@ const Url = require('../models/url');
 
 describe('integration', () => {
   let app, server;
-  describe('POST /urls', () => {
+  describe('POST /api/urls', () => {
     before(done => {
-      app = require('../app')({quiet: true});
+      app = require('../app')({ quiet: true });
       server = app.listen(3000);
       Util.dropAndCreateTableUrls(() => {
         done();
@@ -26,7 +26,7 @@ describe('integration', () => {
     });
     it('responds JSON with initialized url', (done) => {
       request(app)
-        .post('/urls')
+        .post('/api/urls')
         .send({desktop: 'http://www.officemax.com/', quiet: true})
         .expect(200)
         .expect('Content-Type', /json/)
@@ -41,7 +41,7 @@ describe('integration', () => {
         .end(done);
     });
   });
-  describe('GET /urls', () => {
+  describe('GET /api/urls', () => {
     before(done => {
       app = require('../app')({quiet: true});
       server = app.listen(3000);
@@ -61,7 +61,7 @@ describe('integration', () => {
     });
     it('retrieves all URLS from database', (done) => {
       request(app)
-        .get('/urls')
+        .get('/api/urls')
         .expect(200)
         .expect(res => {
           expect(res.body).to.have.length(2);
@@ -72,7 +72,7 @@ describe('integration', () => {
         .end(done);
     });
   });
-  describe('GET /url/:id', () => {
+  describe('GET /api/url/:id', () => {
     before(done => {
       app = require('../app')({quiet: true});
       server = app.listen(3000);
@@ -94,7 +94,7 @@ describe('integration', () => {
     });
     it('retrieves a URL from the database', (done) => {
       request(app)
-        .get('/url/2')
+        .get('/api/url/2')
         .send({quiet: true})
         .expect(200)
         .expect(res => {
@@ -129,7 +129,7 @@ describe('integration', () => {
     it('responds 302', (done) => {
       let yahooShort;
       request(app)
-        .get('/url/2')
+        .get('/api/url/2')
         .send({quiet: true})
         .expect(res => {
           yahooShort = res.body.attributes.short;
@@ -151,7 +151,7 @@ describe('integration', () => {
     it('updates hit and redirect counts', (done) => {
       let yahooShort;
       request(app)
-        .get('/url/2')
+        .get('/api/url/2')
         .send({quiet: true})
         .expect(res => {
           yahooShort = res.body.attributes.short;
@@ -169,7 +169,7 @@ describe('integration', () => {
             })
             .end(() => {
               request(app)
-                .get('/url/2')
+                .get('/api/url/2')
                 .send({quiet: true})
                 .expect(res => {
                   expect(res.body.attributes.mobileHits).to.equal(1);

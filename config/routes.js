@@ -4,15 +4,15 @@ const router = require('express').Router();
 const RedirectsController = require('../controllers/redirects_controller');
 const UrlsController = require('../controllers/urls_controller');
 
-router.get('/urls', (req, res) => {
+router.get('/api/urls', (req, res) => {
   new UrlsController(req, res).index();
 });
 
-router.get('/url/:id', (req, res) => {
+router.get('/api/url/:id', (req, res) => {
   new UrlsController(req, res).show();
 });
 
-router.post('/urls', (req, res) => {
+router.post('/api/urls', (req, res) => {
   new UrlsController(req, res).create();
 });
 
