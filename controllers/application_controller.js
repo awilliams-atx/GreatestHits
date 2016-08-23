@@ -2,11 +2,11 @@
 
 class ApplicationController {
   constructor (req, res, next) {
-    this.req = req || null;
-    this.res = res || null;
+    this.req = req;
+    this.res = res;
     this.next = next || null;
   }
-  
+
   params (whiteList, merge) {
     if (merge === undefined) { merge = {}; }
     let setWhiteList = {};
