@@ -16,8 +16,8 @@ router.post('/api/urls', (req, res) => {
   new UrlsController(req, res).create();
 });
 
-router.get('*', (req, res) => {
-  new RedirectsController(req, res).redirect();
-})
+router.get('*', (req, res, next) => {
+  new RedirectsController(req, res, next).redirect();
+});
 
 module.exports = router;
