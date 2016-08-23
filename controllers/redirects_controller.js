@@ -6,6 +6,11 @@ const QueryHelper = require('../lib/QueryHelper');
 const Url = require('../models/url.js');
 
 class RedirectsController extends ApplicationController {
+  constructor(req, res, next) {
+    super(req, res, next);
+    this.path = nodeUrl.parse(this.req.url).pathname;
+  }
+
   static checkPhoneString (str) {
     return (str === 'phone') ? 'mobile' : str
   }
@@ -29,10 +34,9 @@ class RedirectsController extends ApplicationController {
   }
 
   redirect () {
-    let path = nodeUrl.parse(this.req.url).pathname;
-    if (path === '/') { return this.next(); }
+    if (this.path === '/') { return this.next(); }
     let device = RedirectsController.checkPhoneString(this.req.device.type);
-    Url.where({ where: { short: path }, quiet: this.miscParams().quiet })
+    Url.where({ where: { short: this.path }, quiet: this.miscParams().quiet })
       .then(urls => {
         if (urls.length > 0) {
           this.processRedirect(urls[0], device);
