@@ -4,9 +4,7 @@ const ApplicationController = require('./application_controller');
 
 class UrlsController extends ApplicationController {
   constructor (req, res) {
-    super();
-    this.req = req;
-    this.res = res;
+    super(req, res);
   }
 
   index () {

@@ -1,6 +1,12 @@
 'use strict';
 
 class ApplicationController {
+  constructor (req, res, next) {
+    this.req = req || null;
+    this.res = res || null;
+    this.next = next || null;
+  }
+  
   params (whiteList, merge) {
     if (merge === undefined) { merge = {}; }
     let setWhiteList = {};

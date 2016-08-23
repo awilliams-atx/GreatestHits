@@ -8,10 +8,7 @@ const Url = require('../models/url.js');
 
 class RedirectsController extends ApplicationController {
   constructor(req, res, next) {
-    super();
-    this.req = req;
-    this.res = res;
-    this.next = next;
+    super(req, res, next);
     this.path = nodeUrl.parse(this.req.url).pathname;
   }
 
