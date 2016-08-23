@@ -10,7 +10,7 @@ class RedirectsController extends ApplicationController {
   redirect () {
     let path = nodeUrl.parse(this.req.url).pathname;
     if (path === '/') { return this.next(); }
-    let device = RedirectsController.checkPhoneString(this.req.device.type);
+    let device = this.checkPhoneString(this.req.device.type);
     Url.where({ where: { short: path }, quiet: this.miscParams().quiet })
       .then(urls => {
         if (urls.length > 0) {
@@ -26,7 +26,7 @@ class RedirectsController extends ApplicationController {
 
   // PRIVATE
 
-  static checkPhoneString (str) {
+  checkPhoneString (str) {
     return (str === 'phone') ? 'mobile' : str
   }
 
