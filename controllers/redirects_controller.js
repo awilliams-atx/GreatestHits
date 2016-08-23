@@ -33,7 +33,9 @@ class RedirectsController extends ApplicationController {
   hit (url, deviceHits, redirects) {
     let setOptions = {};
     setOptions[deviceHits] = deviceHits + ' + 1';
-    setOptions[redirects] = redirects + ' + 1';
+    if (redirects !== undefined) {
+      setOptions[redirects] = redirects + ' + 1';
+    }
     Url.update({
       blockToString: { desktopHits: true, mobileHits: true, tabletHits: true, desktopRedirects: true, mobileRedirects: true, tabletRedirects: true },
       set: setOptions,
