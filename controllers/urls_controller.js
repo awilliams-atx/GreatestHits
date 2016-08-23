@@ -3,10 +3,7 @@ const Url = require('../models/url.js');
 const ApplicationController = require('./application_controller');
 
 class UrlsController extends ApplicationController {
-  constructor (req, res) {
-    super(req, res);
-  }
-
+  
   index () {
     Url.all()
       .then(urls => {

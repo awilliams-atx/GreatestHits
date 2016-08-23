@@ -4,7 +4,6 @@ const ApplicationController = require('./application_controller');
 const nodeUrl = require('url');
 const QueryHelper = require('../lib/QueryHelper');
 const Url = require('../models/url.js');
-// const MobileDetect = requirxe('mobile-detect');
 
 class RedirectsController extends ApplicationController {
   constructor(req, res, next) {
