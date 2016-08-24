@@ -1,12 +1,12 @@
 import React from 'react';
 
-function UrlRow (row) {
+function UrlRow (url) {
   return (
-    <tr key={row.id}>
-      <td>{row.id}</td>
-      <td>{row.desktopHits}&nbsp;/&nbsp;{row.desktopRedirects}</td>
-      <td>{row.mobileHits}&nbsp;/&nbsp;{row.mobileRedirects}</td>
-      <td>{row.tabletHits}&nbsp;/&nbsp;{row.tabletRedirects}</td>
+    <tr key={url.id}>
+      <td>{url.id}</td>
+      <td>{url.desktopHits}&nbsp;/&nbsp;{url.desktopRedirects}</td>
+      <td>{url.mobileHits}&nbsp;/&nbsp;{url.mobileRedirects}</td>
+      <td>{url.tabletHits}&nbsp;/&nbsp;{url.tabletRedirects}</td>
     </tr>
   );
 }
