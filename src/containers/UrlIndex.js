@@ -10,6 +10,7 @@ class UrlIndex extends Component {
     this.props.fetchUrls();
 
     this.renderUrls = this.renderUrls.bind(this);
+    this.reorder = this.reorder.bind(this);
   }
 
   render () {
@@ -20,34 +21,34 @@ class UrlIndex extends Component {
             <tr>
               <th><i className="fa fa-hashtag" aria-hidden="true"></i></th>
               <th>
-                <span data-type='dt-hit' onClick={this.reorder}>
+                <span data-metric='dt-hit' onClick={this.reorder}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-desktop" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-type='dt-redirect' onClick={this.reorder}>
+                <span data-metric='dt-redirect' onClick={this.reorder}>
                   <i className="fa fa-desktop" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
               <th>
-                <span data-type='moibile-hit' onClick={this.reorder}>
+                <span data-metric='moibile-hit' onClick={this.reorder}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-mobile" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-type='moibile-redirect' onClick={this.reorder}>
+                <span data-metric='moibile-redirect' onClick={this.reorder}>
                   <i className="fa fa-mobile" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
               <th>
-                <span data-type='tablet-hit' onClick={this.reorder}>
+                <span data-metric='tablet-hit' onClick={this.reorder}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-tablet" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-type='tablet-redirect' onClick={this.reorder}>
+                <span data-metric='tablet-redirect' onClick={this.reorder}>
                   <i className="fa fa-tablet" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
@@ -66,6 +67,10 @@ class UrlIndex extends Component {
     return this.props.urls.map(url => {
       return UrlRow(url.attributes);
     });
+  }
+
+  reorder (e) {
+    console.log(e.currentTarget.dataset.metric);
   }
 }
 
