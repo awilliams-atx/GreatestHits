@@ -5,6 +5,9 @@ const urlsReducer = (state = [], action) => {
   case 'FETCH_URLS':
     return action.payload.data;
     break;
+  case 'SORT_URLS':
+    return action.payload;
+    break;
   case 'SUBMIT_URL':
     return [...state, action.payload.data];
     break;

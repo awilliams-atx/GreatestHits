@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchUrls } from '../actions';
+import { fetchUrls, sortUrls } from '../actions';
 import UrlRow from '../components/UrlRow';
 
 class UrlIndex extends Component {
   constructor (props) {
     super(props);
     this.props.fetchUrls();
+    this.state = {
+      desktopHits: false,
+      mobileHits: false,
+      tabletHits: false,
+      desktopRedirects: false,
+      mobileRedirects: false,
+      tabletRedirects: false
+    };
 
     this.renderUrls = this.renderUrls.bind(this);
-    this.reorder = this.reorder.bind(this);
+    this.sort = this.sort.bind(this);
   }
 
   render () {
+    console.log('rendering');
     return (
       <article id='url-index'>
         <table>
@@ -21,34 +30,34 @@ class UrlIndex extends Component {
             <tr>
               <th><i className="fa fa-hashtag" aria-hidden="true"></i></th>
               <th>
-                <span data-metric='dt-hit' onClick={this.reorder}>
+                <span data-metric='desktopHits' onClick={this.sort}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-desktop" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-metric='dt-redirect' onClick={this.reorder}>
+                <span data-metric='desktopRedirects' onClick={this.sort}>
                   <i className="fa fa-desktop" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
               <th>
-                <span data-metric='moibile-hit' onClick={this.reorder}>
+                <span data-metric='mobileHits' onClick={this.sort}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-mobile" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-metric='moibile-redirect' onClick={this.reorder}>
+                <span data-metric='mobileRedirects' onClick={this.sort}>
                   <i className="fa fa-mobile" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
               <th>
-                <span data-metric='tablet-hit' onClick={this.reorder}>
+                <span data-metric='tabletHits' onClick={this.sort}>
                   <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
                   <i className="fa fa-tablet" aria-hidden="true"></i>
                 </span>
                 /
-                <span data-metric='tablet-redirect' onClick={this.reorder}>
+                <span data-metric='tabletRedirects' onClick={this.sort}>
                   <i className="fa fa-tablet" aria-hidden="true"></i>
                   <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
                 </span>
@@ -69,8 +78,12 @@ class UrlIndex extends Component {
     });
   }
 
-  reorder (e) {
-    console.log(e.currentTarget.dataset.metric);
+  sort (e) {
+    let metric = e.currentTarget.dataset.metric;
+    this.props.sortUrls(this.props.urls, metric, this.state[metric]);
+    let newState = {};
+    newState[metric] = !this.state[metric];
+    this.setState(newState);
   }
 }
 
@@ -79,7 +92,7 @@ function mapStateToProps (state) {
 }
 
 function mapDispatchToProps (dispatch) {
-  return bindActionCreators({ fetchUrls }, dispatch);
+  return bindActionCreators({ fetchUrls, sortUrls }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UrlIndex);
