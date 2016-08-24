@@ -4,6 +4,16 @@ $sandy-orange: #f2ae72;
 $slate-gray-green: #588c7e;
 $sienna: #8c4646;
 
+@keyframes drop-down {
+  0% { transform: translate3d(0, -300px, 0) }
+  100% { transform: translate3d(0, 0, 0) }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
+}
+
 @keyframes scale-up {
   0% { transform: scale(1) }
   100% { transform: scale(1.2) }
