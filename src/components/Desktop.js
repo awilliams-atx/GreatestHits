@@ -18,20 +18,16 @@ class Desktop extends Component {
             aria-hidden="true"
             onClick={this.onDraft}></i>
         </div>
-        {this.renderForm()}
       </section>
     );
   }
 
-  renderForm () {
-    if (this.state.drafting) {
+  onDraft () {
+    this.props.passModal(function () {
       return <UrlForm />;
-    }
+    });
   }
 
-  onDraft () {
-    this.setState({ drafting: !this.state.drafting });
-  }
 }
 
 export default Desktop;
