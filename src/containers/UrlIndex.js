@@ -18,10 +18,40 @@ class UrlIndex extends Component {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Desktop</th>
-              <th>Mobile</th>
-              <th>Tablet</th>
+              <th><i className="fa fa-hashtag" aria-hidden="true"></i></th>
+              <th>
+                <span data-type='dt-hit' onClick={this.reorder}>
+                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
+                  <i className="fa fa-desktop" aria-hidden="true"></i>
+                </span>
+                /
+                <span data-type='dt-redirect' onClick={this.reorder}>
+                  <i className="fa fa-desktop" aria-hidden="true"></i>
+                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th>
+                <span data-type='moibile-hit' onClick={this.reorder}>
+                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
+                  <i className="fa fa-mobile" aria-hidden="true"></i>
+                </span>
+                /
+                <span data-type='moibile-redirect' onClick={this.reorder}>
+                  <i className="fa fa-mobile" aria-hidden="true"></i>
+                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th>
+                <span data-type='tablet-hit' onClick={this.reorder}>
+                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
+                  <i className="fa fa-tablet" aria-hidden="true"></i>
+                </span>
+                /
+                <span data-type='tablet-redirect' onClick={this.reorder}>
+                  <i className="fa fa-tablet" aria-hidden="true"></i>
+                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                </span>
+              </th>
             </tr>
           </thead>
           <tbody>
