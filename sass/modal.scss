@@ -61,7 +61,11 @@
       button:hover {
         background-color: #568175;
       }
+      button:hover {
+        background-color: #527169;
+      }
       button:focus {
+        background-color: #527169;
         outline: 10px auto $khaki-yellow;
       }
     }
