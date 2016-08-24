@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UrlForm from './UrlForm';
+import UrlForm from '../containers/UrlForm';
 import UrlIndex from '../containers/UrlIndex';
 
 class Desktop extends Component {

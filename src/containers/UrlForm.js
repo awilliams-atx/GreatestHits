@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { submitUrl } from '../actions';
 
 class UrlForm extends Component {
   constructor () {
@@ -12,7 +15,10 @@ class UrlForm extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
     this.listener = this.listener.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.onDesktopChange = this.onDesktopChange.bind(this);
+    this.onMobileChange = this.onMobileChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onTabletChange = this.onTabletChange.bind(this);
     this.removeListener = this.removeListener.bind(this);
   }
 
@@ -65,11 +71,11 @@ class UrlForm extends Component {
     this.props.passModal('');
   }
 
-  onDesktopChange () {
+  onDesktopChange (e) {
     this.setState({ desktop: e.target.value });
   }
 
-  onMobileChange () {
+  onMobileChange (e) {
     this.setState({ mobile: e.target.value });
   }
 
@@ -77,9 +83,10 @@ class UrlForm extends Component {
     e.preventDefault();
     this.removeListener();
     this.props.passModal('');
+    this.props.submitUrl(this.state);
   }
 
-  onTabletChange () {
+  onTabletChange (e) {
     this.setState({ tablet: e.target.value });
   }
 
@@ -89,4 +96,8 @@ class UrlForm extends Component {
   }
 }
 
-export default UrlForm;
+function mapDispatchToProps (dispatch) {
+  return bindActionCreators({ submitUrl }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(UrlForm);
