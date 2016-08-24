@@ -1,9 +1,12 @@
-const INITIAL_STATE = [];
+const constants = require('../constants/constants');
 
-const urlsReducer = (state = INITIAL_STATE, action) => {
+const urlsReducer = (state = [], action) => {
   switch (action.type) {
   case 'FETCH_URLS':
     return action.payload.data;
+    break;
+  case 'SUBMIT_URL':
+    return [...state, action.payload.data];
     break;
   default:
     return state;
