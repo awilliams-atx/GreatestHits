@@ -14,6 +14,14 @@ let imaginaming = {
 
 urls.push(imaginaming);
 
+let orangeSoda = {
+  desktop: 'https://www.orangeSoda.com',
+  mobile: 'https://www.orangeSoda.com/mobile',
+  tablet: 'https://www.orangeSoda.com/tablet'
+};
+
+urls.push(orangeSoda);
+
 let dynamike = {
   desktop: 'https://www.dynamike.com',
   mobile: 'https://www.dynamike.com/mobile',
@@ -38,6 +46,13 @@ let evernote = {
 
 urls.push(evernote);
 
+let notebookJeans = {
+  desktop: 'https://www.notebookJeans.com/?var=c',
+  mobile: 'https://www.notebookJeans.com/?var=1'
+};
+
+urls.push(notebookJeans);
+
 // NO MOBILE
 
 let dreamscheme = {
@@ -46,6 +61,13 @@ let dreamscheme = {
 };
 
 urls.push(dreamscheme);
+
+let cordlessFuture = {
+  desktop: 'https://www.cordlessFuture.com',
+  tablet: 'https://www.cordlessFuture.com/tablet'
+};
+
+urls.push(cordlessFuture);
 
 // NO DESKTOP
 
@@ -56,11 +78,18 @@ let nycLifts = {
 
 urls.push(nycLifts);
 
+let sweetHomeNetwork = {
+  mobile: 'https://www.sweetHomeNetwork.com/mobile',
+  tablet: 'https://www.sweetHomeNetwork.com/tablet'
+};
+
+urls.push(sweetHomeNetwork);
+
 // DB INSERTION
 
 let idx = 0;
 
-function insert () {
+function insert (cb) {
   Url.availableRandomString()
     .then(str => {
       return Url.insert({
@@ -71,7 +100,9 @@ function insert () {
     .then(url => {
       idx += 1;
       if (idx < urls.length) {
-        insert(urls[idx]);
+        return insert(cb);
+      } else {
+        cb()
       }
     })
     .catch(err => {
@@ -79,4 +110,33 @@ function insert () {
     })
 };
 
-insert(urls);
+insert(() => {
+  idx = 0;
+  randomUpdates();
+});
+
+let cols = [ 'desktopHits', 'mobileHits', 'tabletHits', 'desktopRedirects', 'mobileRedirects', 'tabletRedirects'];
+
+function randomUpdates () {
+  let id = Math.floor(Math.random() * urls.length) + 1;
+  let col = cols[Math.floor(Math.random() * cols.length)];
+  let setOptions = {};
+  setOptions[col] = col + ' + 1';
+  let blockToString = {};
+  blockToString[col] = true;
+  Url.update({
+    where: { id: id},
+    set: setOptions,
+    blockToString: blockToString,
+    quiet: true
+  })
+    .then(() => {
+      idx += 1;
+      if (idx < 200) {
+        randomUpdates();
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
