@@ -13,3 +13,9 @@ $sienna: #8c4646;
   0% { transform: scale(1.2) }
   100% { transform: scale(1) }
 }
+
+.group:after {
+  clear: both;
+  content: '';
+  display: block;
+}

@@ -1,3 +1,5 @@
+@import 'global';
+
 #modal-background {
   background-color: rgba(#000000, .5);
   bottom: 0;
@@ -7,5 +9,58 @@
   top: 0;
 }
 #modal {
-  margin: 300px auto;
+  background-color: $sienna;
+  border: 10px solid $sandy-orange;
+  border-radius: 20px;
+  margin: 300px auto 0;
+  padding: 30px;
+  width: 440px;
+  form {
+    background-color: none;
+  }
+  label {
+    color: $sandy-orange;
+    display: block;
+    font-family: helvetica;
+    font-size: 24px;
+    margin-top: 30px;
+  }
+  label:first-child {
+    margin-top: 0;
+  }
+  input {
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    display: block;
+    font-size: 18px;
+    margin-top: 5px;
+    padding: 5px;
+    width: 430px;
+  }
+  input:focus {
+    outline: 10px auto $khaki-yellow;
+  }
+  #modal-buttons {
+    float: right;
+    button {
+      float: left;
+      background-color: $slate-gray-green;
+      border-radius: 5px;
+      border: 2px outset $slate-gray-green;
+      color: $sandy-orange;
+      cursor: pointer;
+      font-family: Lobster, cursive;
+      font-size: 24px;
+      margin-left: 10px;
+      margin-top: 25px;
+      padding: 10px;
+    }
+    button:hover {
+      background-color: #568175;
+    }
+    button:focus {
+      outline: 10px auto $khaki-yellow;
+    }
+  }
 }
