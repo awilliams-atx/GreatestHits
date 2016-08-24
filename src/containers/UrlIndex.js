@@ -30,36 +30,45 @@ class UrlIndex extends Component {
             <tr>
               <th><i className="fa fa-hashtag" aria-hidden="true"></i></th>
               <th>
-                <span data-metric='desktopHits' onClick={this.sort}>
-                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
-                  <i className="fa fa-desktop" aria-hidden="true"></i>
+                <span className='table-icon' data-metric='desktopHits' onClick={this.sort}>
+                  <i className="fa fa-long-arrow-down"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-desktop"
+                    aria-hidden="true"></i>
                 </span>
-                /
-                <span data-metric='desktopRedirects' onClick={this.sort}>
-                  <i className="fa fa-desktop" aria-hidden="true"></i>
-                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
-                </span>
-              </th>
-              <th>
-                <span data-metric='mobileHits' onClick={this.sort}>
-                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
-                  <i className="fa fa-mobile" aria-hidden="true"></i>
-                </span>
-                /
-                <span data-metric='mobileRedirects' onClick={this.sort}>
-                  <i className="fa fa-mobile" aria-hidden="true"></i>
-                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                &nbsp;/&nbsp;
+                <span className='table-icon' data-metric='desktopRedirects' onClick={this.sort}>
+                  <i className="fa fa-desktop"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
               <th>
-                <span data-metric='tabletHits' onClick={this.sort}>
-                  <i className="fa fa-long-arrow-down" aria-hidden="true"></i>
-                  <i className="fa fa-tablet" aria-hidden="true"></i>
+                <span className='table-icon' data-metric='mobileHits' onClick={this.sort}>
+                  <i className="fa fa-long-arrow-down"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-mobile"
+                    aria-hidden="true"></i>
                 </span>
-                /
-                <span data-metric='tabletRedirects' onClick={this.sort}>
-                  <i className="fa fa-tablet" aria-hidden="true"></i>
-                  <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                &nbsp;/&nbsp;
+                <span className='table-icon' data-metric='mobileRedirects' onClick={this.sort}>
+                  <i className="fa fa-mobile"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-arrow-right" aria-hidden="true"></i>
+                </span>
+              </th>
+              <th>
+                <span className='table-icon' data-metric='tabletHits' onClick={this.sort}>
+                  <i className="fa fa-long-arrow-down"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-tablet"
+                    aria-hidden="true"></i>
+                </span>
+                &nbsp;/&nbsp;
+                <span className='table-icon' data-metric='tabletRedirects' onClick={this.sort}>
+                  <i className="fa fa-tablet"
+                    aria-hidden="true"></i>
+                  <i className="fa fa-arrow-right" aria-hidden="true"></i>
                 </span>
               </th>
             </tr>

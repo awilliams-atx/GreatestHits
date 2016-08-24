@@ -12,6 +12,16 @@
   #url-index {
     height: 83%;
     margin-bottom: 30px;
+    th {
+      font-size: 3em;
+      .table-icon {
+        color: $sandy-orange;
+        cursor: pointer;
+      }
+      .table-icon:hover {
+        color: $slate-gray-green;
+      }
+    }
   }
   #toolbelt {
     position: absolute;
