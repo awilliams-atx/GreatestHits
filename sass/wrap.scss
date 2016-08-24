@@ -5,6 +5,11 @@ html {
     height: 100%;
     #root {
       min-height: calc(100% - 80px);
+      #wrap {
+        position: absolute;
+        height: calc(100% - 80px);
+        width: 100%;
+      }
     }
   }
 }

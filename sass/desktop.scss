@@ -1,0 +1,12 @@
+@import '_global';
+
+#desktop {
+  background-color: white;
+  border: 20px solid $indian-red;
+  height: calc(100% - 240px);
+  margin: 30px auto;
+  max-width: 640px;
+  padding: 30px;
+  position: relative;
+  width: 90%;
+}

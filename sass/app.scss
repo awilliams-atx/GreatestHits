@@ -1,3 +1,4 @@
+@import 'desktop';
 @import 'global';
 @import 'reset';
 @import 'wrap';
@@ -10,9 +11,6 @@ h1#title {
   font-size: 4em;
   margin: auto;
   text-align: center;
-}
-section#desktop {
-  margin: auto;
 }
 footer#footer {
   background-color: $slate-gray-green;
