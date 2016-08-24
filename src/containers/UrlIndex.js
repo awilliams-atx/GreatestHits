@@ -20,7 +20,6 @@ class UrlIndex extends Component {
   render () {
     return (
       <section>
-        <h1>GreatestHits</h1>
         {this.renderUrls()}
       </section>
     );

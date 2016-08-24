@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 class ToolBelt extends Component {
   render () {
     return (
-      <footer>
+      <div id='toolbelt'>
         <i className="fa fa-file" aria-hidden="true"></i>
-      </footer>
+      </div>
     );
   }
 }

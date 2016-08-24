@@ -11,8 +11,7 @@ class Desktop extends Component {
 
   render () {
     return (
-      <section>
-        uh
+      <section id='desktop'>
         {this.renderForm()}
         <UrlIndex />
         <Toolbelt />

@@ -1,0 +1,10 @@
+html {
+  height: 100%;
+  body {
+    background-color: $khaki-yellow;
+    height: 100%;
+    #root {
+      min-height: calc(100% - 80px);
+    }
+  }
+}

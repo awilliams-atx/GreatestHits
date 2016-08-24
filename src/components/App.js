@@ -5,7 +5,8 @@ class App extends Component {
   // uh
   render () {
     return (
-      <div>
+      <div id='wrap'>
+        <h1 id='title'>GreatestHits</h1>
         <Desktop />
       </div>
     );

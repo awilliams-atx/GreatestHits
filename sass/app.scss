@@ -1,5 +1,22 @@
-$indian-red: #d96459;
-$khaki-yellow: #f2e394;
-$sandy-orange: #f2ae72;
-$slate-gray-green: #588c7e;
-$sienna: #8c4646;
+@import 'global';
+@import 'reset';
+@import 'wrap';
+
+h1#title {
+  background-color: $slate-gray-green;
+  color: $sandy-orange;
+  display: block;
+  font-family: 'Lobster', cursive;
+  font-size: 4em;
+  margin: auto;
+  text-align: center;
+}
+section#desktop {
+  margin: auto;
+}
+footer#footer {
+  background-color: $slate-gray-green;
+  bottom: 0;
+  height: 80px;
+  position: relative;
+}
