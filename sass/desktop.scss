@@ -12,14 +12,30 @@
   #url-index {
     height: 83%;
     margin-bottom: 30px;
-    th {
-      font-size: 3em;
-      .table-icon {
-        color: $sandy-orange;
-        cursor: pointer;
+    text-align: center;
+    table {
+      border-collapse: collapse;
+      margin: auto;
+      th {
+        font-size: 3em;
+        .table-icon {
+          color: $sandy-orange;
+          cursor: pointer;
+        }
+        .table-icon:hover {
+          color: $slate-gray-green;
+        }
       }
-      .table-icon:hover {
-        color: $slate-gray-green;
+      tbody {
+        tr:hover {
+          background-color: $slate-gray-green;
+          color: $sandy-orange;
+          cursor: pointer;
+        }
+        td {
+          font-family: monospace;
+          font-size: 2em;
+        }
       }
     }
   }
