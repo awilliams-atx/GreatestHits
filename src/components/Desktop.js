@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
-import UrlForm from './Desktop';
-import Toolbelt from './Toolbelt';
+import UrlForm from './UrlForm';
 import UrlIndex from '../containers/UrlIndex';
 
 class Desktop extends Component {
   constructor () {
     super();
     this.state = { drafting: false };
+    this.onDraft = this.onDraft.bind(this);
   }
 
   render () {
     return (
       <section id='desktop'>
-        {this.renderForm()}
         <UrlIndex />
-        <Toolbelt />
+        <div id='toolbelt'>
+          <i className="fa fa-file tool"
+            aria-hidden="true"
+            onClick={this.onDraft}></i>
+        </div>
+        {this.renderForm()}
       </section>
     );
   }
@@ -23,6 +27,10 @@ class Desktop extends Component {
     if (this.state.drafting) {
       return <UrlForm />;
     }
+  }
+
+  onDraft () {
+    this.setState({ drafting: !this.state.drafting });
   }
 }
 
