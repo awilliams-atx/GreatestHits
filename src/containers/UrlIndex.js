@@ -2,27 +2,40 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchUrls } from '../actions';
+import UrlRow from '../components/UrlRow';
 
 class UrlIndex extends Component {
   constructor (props) {
     super(props);
     this.props.fetchUrls();
-  }
 
-  renderUrls () {
-    this.props.urls.forEach(url => {
-      return (
-        <li key={url.id}>heresaurl</li>
-      );
-    });
+    this.renderUrls = this.renderUrls.bind(this);
   }
 
   render () {
     return (
-      <section>
-        {this.renderUrls()}
-      </section>
+      <article id='url-index'>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Desktop</th>
+              <th>Mobile</th>
+              <th>Tablet</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderUrls()}
+          </tbody>
+        </table>
+      </article>
     );
+  }
+
+  renderUrls () {
+    return this.props.urls.map(url => {
+      return UrlRow(url.attributes);
+    });
   }
 }
 
