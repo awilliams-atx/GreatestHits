@@ -25,6 +25,9 @@
         .table-icon:hover {
           color: $slate-gray-green;
         }
+        .table-icon:active {
+          color: $indian-red;
+        }
       }
       tbody {
         tr:hover {
@@ -51,6 +54,9 @@
       animation: scale-up .1s ease forwards;
       color: $slate-gray-green;
       cursor: pointer;
+    }
+    .tool:active {
+      color: $indian-red;
     }
   }
 }
