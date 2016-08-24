@@ -24,8 +24,8 @@ class Desktop extends Component {
 
   onDraft () {
     this.props.passModal(function () {
-      return <UrlForm />;
-    });
+      return <UrlForm passModal={this.props.passModal} />;
+    }.bind(this));
   }
 
 }

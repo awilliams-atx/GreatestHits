@@ -8,6 +8,12 @@ class UrlForm extends Component {
       mobile: '',
       tablet: ''
     };
+
+    this.componentDidMount = this.componentDidMount.bind(this);
+    this.listener = this.listener.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.removeListener = this.removeListener.bind(this);
   }
 
   render () {
@@ -18,7 +24,7 @@ class UrlForm extends Component {
             <label>Desktop
               <input value={this.state.desktop}
                 onChange={this.onDesktopChange}
-                ref={(el) => el.focus() } />
+                ref='autoFocus' />
             </label>
             <label>Mobile
               <input value={this.state.mobile}
@@ -29,13 +35,34 @@ class UrlForm extends Component {
                 onChange={this.onTabletChange} />
             </label>
             <div id='modal-buttons' className='group'>
-              <button>Cancel</button>
-              <button>Submit</button>
+              <button onClick={this.onCancel}>Cancel</button>
+              <button onClick={this.onSubmit}>Submit</button>
             </div>
           </form>
         </aside>
       </div>
     );
+  }
+
+  componentDidMount () {
+    this.refs.autoFocus.focus();
+    document.getElementsByTagName('body')[0]
+      .addEventListener('click', this.listener);
+  }
+
+  listener (e) {
+    let body = document.getElementsByTagName('body')[0];
+    let modal = document.getElementById('modal');
+    if (!modal.contains(e.target)) {
+      this.removeListener();
+      this.props.passModal('');
+    }
+  }
+
+  onCancel (e) {
+    e.preventDefault();
+    this.removeListener();
+    this.props.passModal('');
   }
 
   onDesktopChange () {
@@ -46,8 +73,19 @@ class UrlForm extends Component {
     this.setState({ mobile: e.target.value });
   }
 
+  onSubmit (e) {
+    e.preventDefault();
+    this.removeListener();
+    this.props.passModal('');
+  }
+
   onTabletChange () {
     this.setState({ tablet: e.target.value });
+  }
+
+  removeListener () {
+    document.getElementsByTagName('body')[0]
+      .removeEventListener('click', this.listener);
   }
 }
 
