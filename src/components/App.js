@@ -8,7 +8,6 @@ class App extends Component {
     this.passModal = this.passModal.bind(this);
   }
   render () {
-    console.log(this.state);
     return (
       <div id='wrap'>
         <h1 id='title'>GreatestHits</h1>
