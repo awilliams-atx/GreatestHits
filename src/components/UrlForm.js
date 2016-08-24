@@ -17,15 +17,16 @@ class UrlForm extends Component {
           <form>
             <label>Desktop
               <input value={this.state.desktop}
-                onChange={this.onDesktopChange}/>
+                onChange={this.onDesktopChange}
+                ref={(el) => el.focus() } />
             </label>
             <label>Mobile
               <input value={this.state.mobile}
-                onChange={this.onMobileChange}/>
+                onChange={this.onMobileChange} />
             </label>
             <label>Tablet
               <input value={this.state.tablet}
-                onChange={this.onTabletChange}/>
+                onChange={this.onTabletChange} />
             </label>
             <div id='modal-buttons' className='group'>
               <button>Cancel</button>
